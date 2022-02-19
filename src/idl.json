@@ -1,0 +1,319 @@
+{
+  "version": "0.0.0",
+  "name": "solana_of",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "addUser",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "updateUserInfo",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "image",
+          "type": "string"
+        },
+        {
+          "name": "bio",
+          "type": "string"
+        },
+        {
+          "name": "monthPrice",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "becomeCreator",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "image",
+          "type": "string"
+        },
+        {
+          "name": "bio",
+          "type": "string"
+        },
+        {
+          "name": "monthPrice",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "addContent",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "addSubscription",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subscriber",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "subscribedUser",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "removeSubscription",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "subscriber",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "unsubscribedUser",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "upVote",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "voter",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "link",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "BaseAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "users",
+            "type": {
+              "vec": {
+                "defined": "User"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Content",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "userAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "link",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "votes",
+            "type": "u64"
+          },
+          {
+            "name": "userVotes",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "date",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Subscription",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "userAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "subscriptionEnd",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "User",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "userAddress",
+            "type": "publicKey"
+          },
+          {
+            "name": "creator",
+            "type": "bool"
+          },
+          {
+            "name": "image",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "bio",
+            "type": "string"
+          },
+          {
+            "name": "monthPrice",
+            "type": "u64"
+          },
+          {
+            "name": "contents",
+            "type": {
+              "vec": {
+                "defined": "Content"
+              }
+            }
+          },
+          {
+            "name": "subscriptions",
+            "type": {
+              "vec": {
+                "defined": "Subscription"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "metadata": {
+    "address": "CaGtvV7d6nuih4gFisrJ9FJoY9kXeC7x4nWhdDzsrxRa"
+  }
+}

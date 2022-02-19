@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-
 export default function NewPost() {
     return (
         <body className="relative antialiased bg-gray-100">

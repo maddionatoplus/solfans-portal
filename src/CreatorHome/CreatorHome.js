@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link } from "react-router-dom";
-import solfansLogo from "../assets/solfans_logo.png"
+import solfansLogo from "../assets/solfans_logo.png" 
 
 export default function CreatorHome() {
   
