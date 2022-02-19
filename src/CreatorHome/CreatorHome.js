@@ -1,8 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import solfansLogo from "../assets/solfans_logo.png" 
+import { UserContext } from "../App";
 
 export default function CreatorHome() {
+  const {walletAddress } = useContext(UserContext);
   
   return (
     <body className="relative antialiased bg-gray-100">
@@ -49,6 +52,7 @@ export default function CreatorHome() {
             <ul className="flex items-center gap-1">
               <Link to="/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
                 <a href="#" className="px-2 py-2 text-xs bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</a>
+                
                 <li>
                   <Link to="/account">
                     <a href="my-account.html">

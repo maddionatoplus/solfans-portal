@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,22 +32,8 @@ export const opts = {
 }
 
 // Make a custom hook with your future shared state
-const useConnectionState = () => {
-  const [walletAddress, setWalletAddress] = useState("");
-  const [solanaPrice, setSolanaPrice] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [connectedUser, setUser] = useState(null);
-  const [creators, setCreators] = useState([]);
-  const [addUserValue, setAddUserValue] = useState('');
+const useConnectionState = () => { 
 
-  return {
-      walletAddress, setWalletAddress, 
-      solanaPrice, setSolanaPrice,
-      users, setUsers,
-      connectedUser, setUser,
-      creators, setCreators,
-      addUserValue, setAddUserValue,
-  };
 };
 
 // Make a custom hook for sharing your form state between any components
@@ -62,17 +48,34 @@ export const getProvider = () => {
 }
 
 
+export const UserContext = React.createContext({}); 
+
 export default function App() {
  
+  const [walletAddress, setWalletAddress] = useState("");
+  const [solanaPrice, setSolanaPrice] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [connectedUser, setUser] = useState(null);
+  const [creators, setCreators] = useState([]); 
+  const value = { 
+    walletAddress, setWalletAddress, 
+    solanaPrice, setSolanaPrice,
+    users, setUsers,
+    connectedUser, setUser,
+    creators, setCreators 
+  }
+  
   return (
-    <Router>
-      <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/creator" element={<CreatorHome />} />
-          <Route path="/edit" element={<EditPost />} />
-          <Route path="/account" element={<MyAccount />} />
-          <Route path="/new" element={<NewPost />} />
-      </Routes>
-    </Router>
+    <UserContext.Provider value={value}>
+      <Router>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/creator" element={<CreatorHome />} />
+            <Route path="/edit" element={<EditPost />} />
+            <Route path="/account" element={<MyAccount />} />
+            <Route path="/new" element={<NewPost />} />
+        </Routes>
+      </Router>
+    </UserContext.Provider>
   );
 } 
