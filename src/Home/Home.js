@@ -1,9 +1,9 @@
 import { Program } from "@project-serum/anchor";
-import { useEffect, useState, useContext } from "react";
-import { baseAccount, getProvider, programID, useSharedState } from "../App";
+import { baseAccount, getProvider, programID } from "../App";
+import idl from '../idl.json'; 
+import { useEffect, useContext } from "react";
 import { MyUtil } from "../utils/my_util";
 import {useNavigate} from 'react-router-dom';
-import idl from '../idl.json'; 
 import { UserContext } from "../App";
 
 export default function Home() {
@@ -11,7 +11,6 @@ export default function Home() {
   const navigate = useNavigate();
   const {walletAddress, setWalletAddress, setSolanaPrice, setUsers, setUser, setCreators } = useContext(UserContext);
    
-    
   const checkIfWalletIsConnected = async () => {
       try {
           const solana  = window.solana;

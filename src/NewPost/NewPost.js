@@ -1,6 +1,94 @@
+import { useState, useContext, useEffect } from "react";
+import { UserContext } from "../App";
 import { Link } from "react-router-dom";
+import { MyUtil } from "../utils/my_util";
+import { Constants } from "../utils/constants";
+import { uploadFile } from '../utils/file_uploader';
+import { getProvider } from "../App";
+import { Program } from "@project-serum/anchor";
+import idl from "../idl.json"
+import { programID, baseAccount } from "../App";
+import { FilePicker } from 'react-file-picker'
+import {useNavigate} from 'react-router-dom';
 
 export default function NewPost() {
+    const navigate = useNavigate();
+    
+    const {walletAddress} = useContext(UserContext);
+
+    const [contentFileValue, setContentFileValue] = useState(null);
+    const [contentDescriptionValue, setContentDescriptionValue] = useState('')
+    
+    
+    useEffect(() => {
+        const onLoad = async () => {
+            console.log("walletAddres", walletAddress)
+            if(!walletAddress){
+                navigate('/', {replace: true})
+            }
+        };
+        window.addEventListener('load', onLoad);
+        return () => window.removeEventListener('load', onLoad);
+    }, []);
+        
+    const addContent = async () => {
+        if (contentFileValue === null || contentDescriptionValue.length === 0) {
+        console.log("Complete link and description!")
+        return
+        }
+
+        console.log(contentFileValue);
+
+        var randomizeName = MyUtil.randomizeName(contentFileValue.name);
+        
+        console.log(randomizeName); 
+        
+        var url = await uploadFile(randomizeName, contentFileValue)
+
+        setContentFileValue('');
+        setContentDescriptionValue('');
+        console.log('Content link:', url);
+        console.log('Content description:', contentDescriptionValue);
+        try {
+            const provider = getProvider();
+            console.log(provider);
+            const program = new Program(idl, programID, provider);
+            
+            console.log(baseAccount.publicKey)
+            console.log(walletAddress)
+            console.log(url)
+
+            await program.rpc.addContent(
+                url, 
+                contentDescriptionValue, {
+                accounts: {
+                    baseAccount: baseAccount.publicKey,
+                    user: walletAddress,
+                },
+            });
+            console.log("Content successfully uploaded", contentFileValue)
+
+        } catch (error) {
+            console.log("Error uploading content:", error)
+        }
+    }; 
+
+  
+    const onContentDescriptionChange = (event) => {
+        const { value } = event.target;
+        setContentDescriptionValue(value);
+    };
+
+    const onContentFileChange = (value) => {
+        console.log(value);
+        if(value != null && MyUtil.isExtensionValid(value.name, Constants.contentValidExtensions)){
+        setContentFileValue(value);
+        } 
+    };
+
+
+
+
     return (
         <body className="relative antialiased bg-gray-100">
     
@@ -39,11 +127,26 @@ export default function NewPost() {
                         </label>
                         <label className="block">
                             <span className="text-gray-700">Post body</span>
-                            <textarea className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows={3} ></textarea>
+                            <textarea 
+                                value={contentDescriptionValue}
+                                onChange={onContentDescriptionChange} 
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows={3} ></textarea>
                         </label>
+                        <FilePicker
+                            extensions={Constants.contentValidExtensions}
+                            dims={{minWidth: 100, maxWidth: 100, minHeight: 100, maxHeight: 500}}
+                            onChange={base64 => onContentFileChange(base64)}
+                            maxSize={10}
+                            onError={(error) => alert("Accepted only: " + error)}
+                        >
+                            <button  className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">
+                            Pick File
+                            </button>
+                        </FilePicker>
+                        <input type="text" disabled className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value={contentFileValue ? contentFileValue.name : ""} />
                         <ul className="flex space-x-2 xl:space-x-4 text-sm font-semibold">
                             <Link to="/creator" className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">Cancel</Link>
-                            <a href="#" className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish post</a>
+                            <a href="#" onClick={() => addContent()} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish post</a>
                         </ul> 
                     </div>
                     

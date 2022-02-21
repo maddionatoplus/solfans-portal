@@ -62,7 +62,7 @@ export default function App() {
     solanaPrice, setSolanaPrice,
     users, setUsers,
     connectedUser, setUser,
-    creators, setCreators 
+    creators, setCreators, 
   }
   
   return (
