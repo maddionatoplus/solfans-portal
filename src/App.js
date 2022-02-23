@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,6 +17,8 @@ import kp from './keypair.json'
 import idl from './idl.json';
 import { useBetween } from 'use-between';
 import './index.css';
+import CreatorPage from './CreatorPage/CreatorPage';
+import PostPage from './PostPage/PostPage';
 
 // SystemProgram is a reference to the Solana runtime!
 const { SystemProgram } = web3;
@@ -64,16 +66,18 @@ export default function App() {
     connectedUser, setUser,
     creators, setCreators, 
   }
-  
+ 
   return (
     <UserContext.Provider value={value}>
       <Router>
         <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/creator" element={<CreatorHome />} />
-            <Route path="/edit" element={<EditPost />} />
-            <Route path="/account" element={<MyAccount />} />
-            <Route path="/new" element={<NewPost />} />
+            <Route path="/:creator" element={<CreatorPage />} />
+            <Route path="/creator/home" element={<CreatorHome />} />
+            <Route path="/creator/account" element={<MyAccount />} />
+            <Route path="/post/edit" element={<EditPost />} />
+            <Route path="/post/new" element={<NewPost />} />
+            <Route path="/post" element={<PostPage />} />
         </Routes>
       </Router>
     </UserContext.Provider>

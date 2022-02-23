@@ -6,9 +6,9 @@ import { Constants } from "../utils/constants";
 import { uploadFile } from '../utils/file_uploader';
 import { getProvider } from "../App";
 import { Program } from "@project-serum/anchor";
-import idl from "../idl.json"
+import idl from "../idl.json";
 import { programID, baseAccount } from "../App";
-import { FilePicker } from 'react-file-picker'
+import { FilePicker } from 'react-file-picker';
 import {useNavigate} from 'react-router-dom';
 
 export default function NewPost() {
@@ -97,7 +97,7 @@ export default function NewPost() {
             <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                 
                 <div className="container md:col-start-2 col-span-3">
-                    <Link to="/creator" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
+                    <Link to="/creator/home" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg> 
@@ -145,7 +145,7 @@ export default function NewPost() {
                         </FilePicker>
                         <input type="text" disabled className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value={contentFileValue ? contentFileValue.name : ""} />
                         <ul className="flex space-x-2 xl:space-x-4 text-sm font-semibold">
-                            <Link to="/creator" className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">Cancel</Link>
+                            <Link to="/creator/home" className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">Cancel</Link>
                             <a href="#" onClick={() => addContent()} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish post</a>
                         </ul> 
                     </div>

@@ -92,7 +92,7 @@ export default function MyAccount() {
                 <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                     
                     <div className="container md:col-start-2 col-span-3">
-                        <Link to="/creator" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
+                        <Link to="/creator/home" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg> 

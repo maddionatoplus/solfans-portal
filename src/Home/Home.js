@@ -45,7 +45,7 @@ export default function Home() {
 
   useEffect(() => {
       const onLoad = async () => {
-      await checkIfWalletIsConnected();
+        await checkIfWalletIsConnected();
       };
       window.addEventListener('load', onLoad);
       return () => window.removeEventListener('load', onLoad);
@@ -97,14 +97,16 @@ export default function Home() {
               account.users.forEach(
                   (user)=> console.log(user.userAddress.toString()
               ));
+              console.log(account.users.filter((user)=> user.userAddress.toString() !== walletAddress && user.creator))
               setCreators(account.users.filter((user)=> user.userAddress.toString() !== walletAddress && user.creator))
           }
           else{
               setCreators(account.users.filter((user) => user.creator));
               addUser();
           } 
+
           console.log("navigate to creator")
-          navigate('/creator', {replace: true})
+          navigate('/creator/home', {replace: true})
         } catch (error) {
           console.log("Error in getUsers: ", error)
           setUsers([]);

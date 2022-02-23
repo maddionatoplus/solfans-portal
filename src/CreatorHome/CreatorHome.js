@@ -27,7 +27,7 @@ export default function CreatorHome() {
                     </p>
                     <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
                       
-                    <Link to="/edit">
+                    <Link to="/post/edit">
                       <a
                         href="edit-post.html"
                         className="mr-2 hover:text-indigo-600"
@@ -48,7 +48,7 @@ export default function CreatorHome() {
                             />
                         </svg>
                       </a></Link>
-                      <Link to="/edit">
+                      <Link to="/post/edit">
                       <a href="#" className="mr-2 hover:text-indigo-600">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -105,10 +105,10 @@ export default function CreatorHome() {
               <img src={solfansLogo} alt="solfans" width={200}></img>  
             </a>
             <ul className="flex items-center gap-2">
-              <Link to="/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
+              <Link to="/post/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
                 <a href="#" className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</a>
                 <li>
-                  <Link to="/account">
+                  <Link to="/creator/account">
                     <a href="my-account.html">
                         <div className="p-2 rounded hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 stroke-current text-gray-800"
@@ -139,11 +139,11 @@ export default function CreatorHome() {
               <img src={solfansLogo} alt="solfans" width={200}></img>  
             </a>
             <ul className="flex items-center gap-1">
-              <Link to="/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
+              <Link to="/post/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
                 <a href="#" className="px-2 py-2 text-xs bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</a>
                 
                 <li>
-                  <Link to="/account">
+                  <Link to="/creator/account">
                     <a href="my-account.html">
                         <div className="p-2 rounded hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 stroke-current text-gray-800"
