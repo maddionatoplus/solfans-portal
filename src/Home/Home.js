@@ -1,4 +1,4 @@
-import { Program } from "@project-serum/anchor";
+import { Program, web3 } from '@project-serum/anchor';
 import { baseAccount, getProvider, programID } from "../App";
 import idl from '../idl.json'; 
 import { useEffect, useContext } from "react";
@@ -6,10 +6,12 @@ import { MyUtil } from "../utils/my_util";
 import {useNavigate} from 'react-router-dom';
 import { UserContext } from "../App";
 
+const { SystemProgram } = web3;
+
 export default function Home() {
    
   const navigate = useNavigate();
-  const {walletAddress, setWalletAddress, setSolanaPrice, setUsers, setUser, setCreators } = useContext(UserContext);
+  const {walletAddress, setWalletAddress, setSolanaPrice, users, setUsers, setUser, setCreators } = useContext(UserContext);
    
   const checkIfWalletIsConnected = async () => {
       try {
@@ -60,6 +62,42 @@ export default function Home() {
       }
   }, [walletAddress]);
 
+  
+  const renderOneTimeInizialization = () => {
+    // If we hit this, it means the program account hasn't been initialized.
+    if (users === null) {
+      return (
+        <div className="connected-container">
+          <button className="cta-button submit-gif-button" onClick={createTopContentAccount}>
+            Do One-Time Initialization Solfans
+          </button>
+        </div>
+      )
+    }
+  }
+
+  
+  const createTopContentAccount = async () => {
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programID, provider);
+      await program.rpc.initialize({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount]
+      });
+      console.log("Created a new BaseAccount w/ address:", baseAccount.publicKey.toString())
+      await getUsers();
+
+
+    } catch(error) {
+      console.log("Error creating BaseAccount account:", error)
+    }
+  }
+
   const renderNotConnectedContainer = () => (
     <button
       className="cta-button connect-wallet-button"
@@ -91,6 +129,7 @@ export default function Home() {
           console.log(account.users); 
           console.log(provider.wallet.publicKey.toString());
           var user = account.users.find((user) => user.userAddress.toString() === provider.wallet.publicKey.toString());
+          console.log(user)
           if(user != null && walletAddress != null){
               console.log("user registered");
               setUser(user);
@@ -101,15 +140,20 @@ export default function Home() {
               setCreators(account.users.filter((user)=> user.userAddress.toString() !== walletAddress && user.creator))
           }
           else{
-              setCreators(account.users.filter((user) => user.creator));
-              addUser();
+              setCreators(account.users.filter((user) => user.creator)); 
           } 
 
-          console.log("navigate to creator")
-          navigate('/creator/home', {replace: true})
+          if(user && user.creator){
+            console.log("navigate to creator")
+            navigate('/creator/home', {replace: true})
+          }
+          else{
+            console.log("navigate to profile")
+            navigate('/creator/account', {replace: true})  
+          }
         } catch (error) {
           console.log("Error in getUsers: ", error)
-          setUsers([]);
+          setUsers(null);
           setUser(null);
       }
   }
@@ -136,6 +180,7 @@ export default function Home() {
   return (
       <div className="App">
           {!walletAddress && renderNotConnectedContainer()}
+          {walletAddress && !users && renderOneTimeInizialization(false)} 
       </div>
     )
     ;

@@ -53,7 +53,6 @@ export const getProvider = () => {
 export const UserContext = React.createContext({}); 
 
 export default function App() {
- 
   const [walletAddress, setWalletAddress] = useState("");
   const [solanaPrice, setSolanaPrice] = useState(null);
   const [users, setUsers] = useState([]);

@@ -55,6 +55,10 @@
       ],
       "args": [
         {
+          "name": "name",
+          "type": "string"
+        },
+        {
           "name": "image",
           "type": "string"
         },
@@ -121,6 +125,10 @@
           "type": "string"
         },
         {
+          "name": "title",
+          "type": "string"
+        },
+        {
           "name": "description",
           "type": "string"
         }
@@ -140,7 +148,7 @@
           "isSigner": true
         },
         {
-          "name": "subscribedUser",
+          "name": "creator",
           "isMut": true,
           "isSigner": false
         }
@@ -161,7 +169,7 @@
           "isSigner": true
         },
         {
-          "name": "unsubscribedUser",
+          "name": "creator",
           "isMut": true,
           "isSigner": false
         }
@@ -228,6 +236,10 @@
             "type": "string"
           },
           {
+            "name": "title",
+            "type": "string"
+          },
+          {
             "name": "description",
             "type": "string"
           },
@@ -282,15 +294,15 @@
             "type": "string"
           },
           {
-            "name": "name",
-            "type": "string"
-          },
-          {
             "name": "bio",
             "type": "string"
           },
           {
             "name": "monthPrice",
+            "type": "u64"
+          },
+          {
+            "name": "total",
             "type": "u64"
           },
           {
@@ -308,6 +320,18 @@
                 "defined": "Subscription"
               }
             }
+          },
+          {
+            "name": "followers",
+            "type": {
+              "vec": {
+                "defined": "Subscription"
+              }
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
           }
         ]
       }

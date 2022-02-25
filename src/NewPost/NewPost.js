@@ -17,6 +17,7 @@ export default function NewPost() {
     const {walletAddress} = useContext(UserContext);
 
     const [contentFileValue, setContentFileValue] = useState(null);
+    const [titleDescriptionValue, setTitleDescriptionValue] = useState('')
     const [contentDescriptionValue, setContentDescriptionValue] = useState('')
     
     
@@ -32,9 +33,9 @@ export default function NewPost() {
     }, []);
         
     const addContent = async () => {
-        if (contentFileValue === null || contentDescriptionValue.length === 0) {
-        console.log("Complete link and description!")
-        return
+        if ( titleDescriptionValue === null || contentFileValue === null || contentDescriptionValue.length === 0) {
+            console.log("Complete link and description!")
+            return
         }
 
         console.log(contentFileValue);
@@ -45,8 +46,6 @@ export default function NewPost() {
         
         var url = await uploadFile(randomizeName, contentFileValue)
 
-        setContentFileValue('');
-        setContentDescriptionValue('');
         console.log('Content link:', url);
         console.log('Content description:', contentDescriptionValue);
         try {
@@ -60,6 +59,7 @@ export default function NewPost() {
 
             await program.rpc.addContent(
                 url, 
+                titleDescriptionValue,
                 contentDescriptionValue, {
                 accounts: {
                     baseAccount: baseAccount.publicKey,
@@ -67,12 +67,20 @@ export default function NewPost() {
                 },
             });
             console.log("Content successfully uploaded", contentFileValue)
+            setContentFileValue('');
+            setTitleDescriptionValue('');
+            setContentDescriptionValue('');
+            navigate('/', {replace: true})
 
         } catch (error) {
             console.log("Error uploading content:", error)
         }
-    }; 
-
+    };  
+  
+    const onTitleDescriptionChange = (event) => {
+        const { value } = event.target;
+        setTitleDescriptionValue(value);
+    };
   
     const onContentDescriptionChange = (event) => {
         const { value } = event.target;
@@ -123,14 +131,17 @@ export default function NewPost() {
                         </div>
                         <label className="block">
                             <span className="text-gray-700">Post title</span>
-                            <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="post title" />
+                            <input type="text" 
+                                value={titleDescriptionValue}
+                                onChange={onTitleDescriptionChange} 
+                                className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="post title" />
                         </label>
                         <label className="block">
                             <span className="text-gray-700">Post body</span>
                             <textarea 
                                 value={contentDescriptionValue}
                                 onChange={onContentDescriptionChange} 
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows={3} ></textarea>
+                                className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" rows={3} ></textarea>
                         </label>
                         <FilePicker
                             extensions={Constants.contentValidExtensions}

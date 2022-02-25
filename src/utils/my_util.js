@@ -11,9 +11,7 @@ class MyUtil{
         console.log(toRet);
         return toRet;
     }
-
-
-
+ 
     static printPriceString(lamports, solanaPrice){
         return lamports + " = " + lamports/LAMPORTS_PER_SOL + " SOL = " + MyUtil.convertLamportToUSD(lamports, solanaPrice) + " USD";
     }

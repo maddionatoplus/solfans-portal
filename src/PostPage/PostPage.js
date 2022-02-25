@@ -1,6 +1,7 @@
 
 import { useEffect } from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
+import { MyUtil } from '../utils/my_util';
 
 export default function PostPage () {
     const navigate = useNavigate();
@@ -22,14 +23,14 @@ export default function PostPage () {
         return () => window.removeEventListener('load', onLoad);
       }, []);
 
-    const renderPost = () => {
+    const renderPostPage = () => {
         return (
         <body class="relative antialiased bg-gray-100">
             <div class="p-4 md:pb-4 md:pt-8 container mx-w-6xl mx-auto">
                 <div class="flex flex-col space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                         <div class="container md:col-start-2 col-span-3">
-                            <a href="index-subscribed.html" class="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
+                            <a href="/" class="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg> 
@@ -44,6 +45,23 @@ export default function PostPage () {
                     <div class="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                         <div class="container md:col-start-2 col-span-3">
                             <div class="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                                {
+                                    MyUtil.isImage(post.link) ?
+                                        (
+                                        <img width="400" height="400" src={post.link} alt={post.userAddress}  title={post.link} />
+                                        )
+                                        : MyUtil.isVideo(post.link) ?
+                                        (
+                                            <video width="400" height="400" controls>
+                                            <source src={post.link} type="video/mp4"></source>
+                                            </video>
+                                        )
+                                        :
+                                        (
+                                            <iframe width="400" height="400" src={post.link} alt={post.userAddress}   title={post.link} />
+                                        )
+                                }
+                                
                                 <h2 class="px-4 text-2xl font-bold">{post.title}</h2>
                                 <p class="px-4 text-sm text-gray-600">{post.description}</p>
                             </div>
@@ -58,7 +76,7 @@ export default function PostPage () {
     return (
         <div>
             {
-                post && renderPost()
+                post && renderPostPage()
             }
             {
                 post === undefined && <p>loading</p>

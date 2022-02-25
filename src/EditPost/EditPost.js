@@ -34,7 +34,7 @@ export default function EditPost() {
                         </div>
                         <label className="block">
                             <span className="text-gray-700">Post title</span>
-                            <input type="text" className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="post title" />
+                            <input type="text" className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="post title" />
                         </label>
                         <label className="block">
                             <span className="text-gray-700">Post body</span>
