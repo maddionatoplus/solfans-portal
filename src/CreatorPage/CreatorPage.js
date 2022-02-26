@@ -16,37 +16,37 @@ const { SystemProgram } = web3;
 
 export default function CreatorPage() {
   const navigate = useNavigate();
-  let { creator } = useParams();
+  const { creator } = useParams();
   const {connectedUser, setUser, setCreators, setSolanaPrice, setWalletAddress, walletAddress} = useContext(UserContext);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [selectedCreator, setSelectedCreator] = useState(null);
   const [itsme, setItsMe] = useState(false);
 
-  const checkIfWalletIsConnected = async () => {
-    try {
-        const solana  = window.solana;
+    const checkIfWalletIsConnected = async () => {
+        try {
+            const solana  = window.solana;
 
-        if (solana) {
-          if (solana.isPhantom) {
-              console.log('Phantom wallet found!');
+            if (solana) {
+            if (solana.isPhantom) {
+                console.log('Phantom wallet found!');
 
-              var solanaPrice = await MyUtil.getSolanaPrice();
-              console.log(solanaPrice)
-              setSolanaPrice(solanaPrice.usd);
-              const response = await solana.connect({ onlyIfTrusted: true });
-              const wallet = response.publicKey.toString();
-              console.log('Connected with Public Key:', wallet);
+                var solanaPrice = await MyUtil.getSolanaPrice();
+                console.log(solanaPrice)
+                setSolanaPrice(solanaPrice.usd);
+                const response = await solana.connect({ onlyIfTrusted: true });
+                const wallet = response.publicKey.toString();
+                console.log('Connected with Public Key:', wallet);
 
-              setWalletAddress(wallet);
-              return wallet;
-          }
-        } else {
-          alert('Solana object not found! Get a Phantom Wallet 👻');
+                setWalletAddress(wallet);
+                return wallet;
+            }
+            } else {
+            alert('Solana object not found! Get a Phantom Wallet 👻');
+            }
+        } catch (error) {
+            console.error(error);
         }
-    } catch (error) {
-        console.error(error);
-    }
-};
+    };
 
   
   useEffect(() => {
@@ -91,20 +91,48 @@ export default function CreatorPage() {
     };
     window.addEventListener('load', onLoad);
     return () => window.removeEventListener('load', onLoad);
-  }, []);
+  }, [creator]);
 
   const renderLoading = () => {
     return <div className="w-full h-full">LOADING</div>
   }
 
   const renderNoContent = () => {
-
-    if(itsme){
-        return (
-            <div className="content-around">
-                <Link to="/post/new"><a href="#" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish your first content!</a></Link>
-            </div>
-        )
+      console.log("renderNoContent")
+      if(itsme){
+        console.log("itsme")
+        console.log(connectedUser)
+        if(connectedUser.contents.length > 0){
+            console.log("ciao")
+            return (
+                connectedUser.contents.map((item, index) => {  
+                    return (
+                        <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
+                            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                                <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                                <span
+                                    className="px-4 text-sm text-gray-600"
+                                    style={{ fontWeight: 400 }}
+                                >
+                                    {MyUtil.timeConverter(item.date.toNumber())}
+                                </span>
+                                <p className="px-4 text-sm text-gray-600">{item.description}</p>
+                            </div>               
+                            <Link to="/post" state={{post:item}}> 
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                            </Link> 
+                        </li>
+                    )
+                })
+            )
+        }
+        else {
+            return (
+                <div className="content-around">
+                    <Link to="/post/new"><a href="#" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish your first content!</a></Link>
+                </div>
+            )
+        }
     }
 
     if(selectedSubscription == null){
@@ -121,21 +149,29 @@ export default function CreatorPage() {
   }
 
   const renderPostList = () => {
-
+    console.log(selectedSubscription)
     return (
         <div className="container col-span-3">
             <div className="col-span-3 bg-white p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
             {
-
                 selectedSubscription != null && selectedCreator.contents.length > 0 ?
                     selectedCreator.contents.map((item, index) => {  
                         return (
-                            <Link to={selectedSubscription != null ? '/post' : '#'} className={selectedSubscription != null ? "disabled-link" : ""} state={{post: item}} key={index}>
-                                <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                    <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
-                                    <p className="px-4 text-sm text-gray-600">{item.description}</p>
-                                </div>
-                            </Link>
+                                <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
+                                    <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                                        <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                                        <span
+                                            className="px-4 text-sm text-gray-600"
+                                            style={{ fontWeight: 400 }}
+                                        >
+                                            {MyUtil.timeConverter(item.date.toNumber())}
+                                        </span>
+                                        <p className="px-4 text-sm text-gray-600">{item.description}</p>
+                                    </div>               
+                                    <Link to="/post" state={{post:item}}> 
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                    </Link> 
+                                </li>               
                         )
                     })
                 :
@@ -162,7 +198,7 @@ export default function CreatorPage() {
         SystemProgram.transfer({
           fromPubkey: provider.wallet.publicKey,
           toPubkey: new PublicKey(creator.userAddress),
-          lamports: price
+          lamports: 20000
         })
       );
     

@@ -69,6 +69,8 @@ export default function MyAccount() {
             url = await uploadFile(randomizeName, coverImageValue)
           }
 
+          console.log(monthPriceValue)
+
           await program.rpc.updateUserInfo(userValue, url, addBioValue, monthPriceValue , {
             accounts: {
               baseAccount: baseAccount.publicKey,
@@ -98,7 +100,10 @@ export default function MyAccount() {
             return false;
         }
 
-        if(isNaN(monthPriceValue) || monthPriceValue < 0){
+        let value = monthPriceValue.replace(",",".")
+        setMonthPriceValue(value)
+
+        if(isNaN(value) || value < 0){
             alert("input a valid month price")
             return false;
         }
@@ -280,18 +285,17 @@ export default function MyAccount() {
           {
             connectedUser &&  
             connectedUser.subscriptions.map((subscription, index) => {
-                var creator = users.find((user) => user.userAddress.toString() === subscription.userAddress);
+                console.log(subscription)
+                var creator = users.find((user) => user.userAddress.toString() === subscription.userAddress.toString());
                 const subscriptionEndString = MyUtil.timeConverter(subscription.subscriptionEnd.toNumber());
+                console.log(creator)
 
-                if(MyUtil.isSubscriptionValid(subscription)) 
+                if(MyUtil.isSubscriptionValid(subscription) && creator) 
                     return (
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <p className="text-gray-800">{creator.name}<br/><span className="text-sm text-gray-600" style={{fontWeight: 400}}>Subscribtion is valid until: {subscriptionEndString}</span></p>
                             <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
-                                <a href="edit-post.html" className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                </a>
-                                <a href="#" className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                </a>
+                                <Link to={"/" + creator.name} className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></Link>
                             </p>
                         </li>
                     ) 

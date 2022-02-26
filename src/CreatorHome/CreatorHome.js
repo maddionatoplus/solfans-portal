@@ -27,27 +27,9 @@ export default function CreatorHome() {
                     </p>
                     <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
                     {
-                      <Link to="/post" state={{post:item}}>
-                      <a
-                        href="edit-post.html"
-                        className="mr-2 hover:text-indigo-600"
-                        >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          >
-                          {" "}
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                        </svg>
-                      </a></Link>
+                      <Link to="/post" state={{post:item}}> 
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      </Link>
                      /* 
                     <Link to="/post/edit">
                       <a
@@ -124,7 +106,7 @@ export default function CreatorHome() {
     <body className="relative antialiased bg-gray-100">
       {Menu(connectedUser)}  
       <main className="container mx-w-6xl mx-auto py-4">
-        <div className="flex flex-col space-y-8">
+        <div className="flex flex-col mx-4 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
             <div className="container col-span-4">
               <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
@@ -166,7 +148,7 @@ export default function CreatorHome() {
                     TOTAL SUPPORTERS
                   </span>
                   <h2 className="font-bold text-4xl mb-1">{
-                      connectedUser.subscriptions.length
+                      connectedUser.followers.length
                     }</h2>
                 </div>
               </div>
