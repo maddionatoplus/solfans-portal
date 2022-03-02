@@ -10,6 +10,7 @@ import { LAMPORTS_PER_SOL, PublicKey, Transaction } from '@solana/web3.js';
 import { baseAccount, getProvider, programID } from "../App";
 import idl from '../idl.json';    
 import Menu from "../Widgets/Menu";
+import Content from "../Widgets/Content";
 
 // SystemProgram is a reference to the Solana runtime!
 const { SystemProgram } = web3;
@@ -97,7 +98,7 @@ export default function CreatorPage() {
     return <div className="w-full h-full">LOADING</div>
   }
 
-  const renderNoContent = () => {
+  const renderNotSubscribed = () => {
       console.log("renderNoContent")
       if(itsme){
         console.log("itsme")
@@ -110,6 +111,9 @@ export default function CreatorPage() {
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
                                 <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                                {
+                                    Content(item)
+                                } 
                                 <span
                                     className="px-4 text-sm text-gray-600"
                                     style={{ fontWeight: 400 }}
@@ -118,7 +122,7 @@ export default function CreatorPage() {
                                 </span>
                                 <p className="px-4 text-sm text-gray-600">{item.description}</p>
                             </div>               
-                            <Link to="/post" state={{post:item}}> 
+                            <Link to="/post" state={{post:item, creator: selectedCreator}}> 
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                             </Link> 
                         </li>
@@ -160,6 +164,9 @@ export default function CreatorPage() {
                                 <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                                     <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
                                         <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                                        {
+                                            Content(item)
+                                        } 
                                         <span
                                             className="px-4 text-sm text-gray-600"
                                             style={{ fontWeight: 400 }}
@@ -175,7 +182,7 @@ export default function CreatorPage() {
                         )
                     })
                 :
-                renderNoContent()
+                renderNotSubscribed()
             }
             </div>
         </div>
@@ -319,7 +326,7 @@ export default function CreatorPage() {
             <main className="w-screen">
                 <div className="mb-6 pt-20 pb-6 pr-6 pl-6">
                     <div className="w-full flex flex-col items-center mb-6">
-                        <img className="h-32 w-32 bg-gray-500 border-none rounded-full" />
+                        <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
                         </div>
                         <div>
                             <h1 className="px-4 text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
@@ -345,7 +352,7 @@ export default function CreatorPage() {
         {selectedCreator == null && renderLoading()}
         {selectedCreator != null && renderCreatorPage()}
         <div>
-            <div className="w-full flex flex-col items-center mb-8 mt-6">
+            <div className="w-full flex flex-col items-center mb-4 mt-6">
                 <div className="mb-3">
                     <p className="px-4 text-sm font-semibold text-center text-gray-600">Powered by</p>
                 </div>

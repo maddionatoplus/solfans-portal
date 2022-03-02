@@ -1,0 +1,21 @@
+import { MyUtil } from "../utils/my_util"
+
+export default function Content(post){
+    return (    
+        MyUtil.isImage(post.link) ?
+                (
+                <img width="400" height="400" src={post.link} alt={post.userAddress}  title={post.link} />
+                )
+                : MyUtil.isVideo(post.link) ?
+                (
+                    <video width="400" height="400" controls>
+                    <source src={post.link} type="video/mp4"></source>
+                    </video>
+                )
+                :
+                (
+                    <iframe width="400" height="400" src={post.link} alt={post.userAddress}   title={post.link} />
+                )
+                
+)
+}

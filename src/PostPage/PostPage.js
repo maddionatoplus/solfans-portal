@@ -1,15 +1,15 @@
 
 import { useEffect, useContext } from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
-import { MyUtil } from '../utils/my_util';
+import {useNavigate, useLocation} from 'react-router-dom'; 
 import Menu from './../Widgets/Menu'
 import { UserContext } from '../App';
+import Content from '../Widgets/Content';
 
 export default function PostPage () {
     const navigate = useNavigate();
     const location = useLocation();
     const { post } = location.state;
-    const {connectedUser,} = useContext(UserContext);
+    const {connectedUser} = useContext(UserContext);
 
     useEffect(() => {
         const onLoad = async () => {
@@ -25,27 +25,7 @@ export default function PostPage () {
         window.addEventListener('load', onLoad);
         return () => window.removeEventListener('load', onLoad);
       }, []);
-
-    const renderContent = (post) => {
-        return (    
-                MyUtil.isImage(post.link) ?
-                        (
-                        <img width="400" height="400" src={post.link} alt={post.userAddress}  title={post.link} />
-                        )
-                        : MyUtil.isVideo(post.link) ?
-                        (
-                            <video width="400" height="400" controls>
-                            <source src={post.link} type="video/mp4"></source>
-                            </video>
-                        )
-                        :
-                        (
-                            <iframe width="400" height="400" src={post.link} alt={post.userAddress}   title={post.link} />
-                        )
-                        
-        )
-    }
-
+ 
     const renderPostPage = () => {
         return (
         <body class="relative antialiased bg-gray-100">
@@ -70,7 +50,7 @@ export default function PostPage () {
                         <div class="container md:col-start-2 col-span-3">
                             <div class="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
                                 {
-                                    renderContent(post)
+                                    Content(post)
                                 }
                                 <h2 class="px-4 text-2xl font-bold">{post.title}</h2>
                                 <p class="px-4 text-sm text-gray-600">{post.description}</p>

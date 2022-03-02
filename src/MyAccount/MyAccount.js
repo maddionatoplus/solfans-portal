@@ -100,7 +100,7 @@ export default function MyAccount() {
             return false;
         }
 
-        let value = monthPriceValue.replace(",",".")
+        let value = monthPriceValue.toString().replace(",",".")
         setMonthPriceValue(value)
 
         if(isNaN(value) || value < 0){
