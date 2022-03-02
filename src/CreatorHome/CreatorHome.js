@@ -136,9 +136,9 @@ export default function CreatorHome() {
                   <span className="text-xs text-gray-500 font-semibold mb-1">
                     TOTAL EARNINGS (SOL)
                   </span>
-                  <h2 className="font-bold text-4xl mb-1">{connectedUser.total.toNumber()}</h2>
-                  <span className="text-xs text-gray-500 font-regular">
-                  {connectedUser.total.toNumber() * solanaPrice} $
+                  <h2 className="font-bold text-4xl mb-1">{MyUtil.convertPriceInSol(connectedUser.total.toNumber())}</h2>
+                  <span className="text-xs text-gray-500 font-regular">  
+                  {(MyUtil.convertPriceInSol(connectedUser.total.toNumber()) * solanaPrice).toFixed(2)} $
                   </span>
                 </div>
               </div>

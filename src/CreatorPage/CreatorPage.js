@@ -67,7 +67,10 @@ export default function CreatorPage() {
             
             let creators = (account.users.filter((user) => user.creator));
             setCreators(creators);
-            var selectedCreator = creators.find((user) => user.name === creator);
+            var selectedCreator = creators.find((user) => user.name.toLowerCase() === creator.toLowerCase());
+            console.log(creator)
+            console.log(selectedCreator)
+            console.log(creators)
             if(selectedCreator != null){
                 console.log(wallet)
                 if(wallet != null){
