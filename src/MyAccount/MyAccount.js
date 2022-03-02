@@ -28,8 +28,8 @@ export default function MyAccount() {
         }
         console.log("setAddUserValue");
         setUserValue(connectedUser != null ? connectedUser.name : "");
-        setAddBioValue(connectedUser != null ? connectedUser.bio : "");
-        setMonthPriceValue((connectedUser != null ? connectedUser.monthPrice.toNumber() : 1)); 
+        setAddBioValue(connectedUser != null ? connectedUser.bio : ""); 
+        setMonthPriceValue((connectedUser != null ? MyUtil.convertPriceInSol(connectedUser.monthPrice.toNumber()) : 1));  
     }, [connectedUser]);
 
     const onBioChange = (event) => {
@@ -71,7 +71,7 @@ export default function MyAccount() {
 
           console.log(monthPriceValue)
 
-          await program.rpc.updateUserInfo(userValue, url, addBioValue, monthPriceValue , {
+          await program.rpc.updateUserInfo(userValue, url, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
             accounts: {
               baseAccount: baseAccount.publicKey,
               user: walletAddress,
@@ -100,7 +100,7 @@ export default function MyAccount() {
             return false;
         }
 
-        let value = monthPriceValue.toString().replace(",",".")
+        let value = monthPriceValue.toString().replace(",",".") 
         setMonthPriceValue(value)
 
         if(isNaN(value) || value < 0){
@@ -134,7 +134,7 @@ export default function MyAccount() {
                 url = await uploadFile(randomizeName, coverImageValue)
             }
             
-            await program.rpc.becomeCreator(userValue, url, addBioValue, monthPriceValue, {
+            await program.rpc.becomeCreator(userValue, url, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
                 accounts: {
                 baseAccount: baseAccount.publicKey,
                 user: walletAddress,

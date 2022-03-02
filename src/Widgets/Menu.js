@@ -49,7 +49,7 @@ export default function Menu(connectedUser) {
                     </Link>
                 </li>
                 <li>
-                    <a href="#" onClick={()=>disconnect()}>
+                    <button onClick={()=>disconnect()}>
                         <div className="p-2 rounded hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 stroke-current text-gray-800"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -57,7 +57,7 @@ export default function Menu(connectedUser) {
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
                         </div>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -66,10 +66,10 @@ export default function Menu(connectedUser) {
               <img src={solfansLogo} alt="solfans" width={200}></img>  
             </a>
             <ul className="flex items-center gap-1">
-              <Link to="/post/new"><a href="#" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</a></Link>
+              <Link to="/post/new" className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New post</Link>
                 {
                   (connectedUser && connectedUser.creator) &&
-                    <Link to={"/" + connectedUser.name} className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</Link>
+                    <Link to={"/creator/home"} className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</Link>
                 }
                 <li>
                   <Link to="/creator/account">
@@ -87,7 +87,7 @@ export default function Menu(connectedUser) {
                   </Link>
                 </li>
                 <li>
-                    <a href="#" onClick={()=>disconnect()}>
+                    <button onClick={()=>disconnect()}>
                         <div className="p-2 rounded hover:bg-gray-200">
                             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 stroke-current text-gray-800"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -95,7 +95,7 @@ export default function Menu(connectedUser) {
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
                         </div>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>

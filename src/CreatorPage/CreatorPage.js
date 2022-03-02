@@ -133,7 +133,7 @@ export default function CreatorPage() {
         else {
             return (
                 <div className="content-around">
-                    <Link to="/post/new"><a href="#" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish your first content!</a></Link>
+                    <Link to="/post/new" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish your first content!</Link>
                 </div>
             )
         }
@@ -199,13 +199,13 @@ export default function CreatorPage() {
       console.log(provider.wallet.publicKey)
       console.log(creator.userAddress)
 
-      const price = creator.monthPrice.toNumber() * LAMPORTS_PER_SOL;
+      const price = MyUtil.convertPriceInSol(creator.monthPrice.toNumber()) * LAMPORTS_PER_SOL;
 
       let transaction = new Transaction().add(
         SystemProgram.transfer({
           fromPubkey: provider.wallet.publicKey,
           toPubkey: new PublicKey(creator.userAddress),
-          lamports: 20000
+          lamports: price
         })
       );
     
@@ -281,7 +281,7 @@ export default function CreatorPage() {
                     <div className="col-span-1 bg-white p-6 mx-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
                         <div className="grid">
                             <span className="text-xs text-gray-500 font-semibold mb-2 uppercase">Support {selectedCreator.name}</span>
-                            <span className="text-sm text-gray-800 font-regular mb-4">Your subscription cost is {selectedCreator.monthPrice.toNumber()} SOL.</span>
+                            <span className="text-sm text-gray-800 font-regular mb-4">Your subscription cost is {MyUtil.convertPriceInSol(selectedCreator.monthPrice.toNumber())} SOL.</span>
                             <Link to={"/creator/account"} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Click to modify</Link>
                         </div>
                     </div>
@@ -299,7 +299,7 @@ export default function CreatorPage() {
                             <span className="text-xs text-gray-500 font-semibold mb-2 uppercase">You are {!subscriptionValid ? "no more" : ""} subscribed to {selectedCreator.name}</span>
                             <span className="text-sm text-gray-800 font-regular mb-4">{subscriptionText}</span>
                             {!subscriptionValid && <span className="text-sm text-gray-800 font-regular mb-4">Subscribe now and get 30 days access to all content from this creator</span>} 
-                            <a href="#"  onClick={() => subscriptionValid ? unsubscribe(selectedCreator) : subscribe(selectedCreator)} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">{subscriptionValid?"UNSUBSCRIBE":"SUBSCRIBE - " + selectedCreator.monthPrice.toNumber() + " SOL"} </a>
+                            <a href="#"  onClick={() => subscriptionValid ? unsubscribe(selectedCreator) : subscribe(selectedCreator)} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">{subscriptionValid?"UNSUBSCRIBE":"SUBSCRIBE - " + MyUtil.convertPriceInSol(selectedCreator.monthPrice.toNumber()) + " SOL"} </a>
                         </div>
                     </div>
                 </div>  
@@ -313,7 +313,7 @@ export default function CreatorPage() {
                     <div className="grid">
                         <span className="text-xs text-gray-500 font-semibold mb-2 uppercase">Support {selectedCreator.name}</span>
                         <span className="text-sm text-gray-800 font-regular mb-4">Subscribe now and get 30 days access to all content from this creator.</span>
-                        <a href="#"  onClick={() => subscribe(selectedCreator)} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">{subscriptionValid?"UNSUBSCRIBE":"SUBSCRIBE - " + selectedCreator.monthPrice.toNumber() + " SOL"} </a>
+                            <a href="#"  onClick={() => subscribe(selectedCreator)} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">{subscriptionValid?"UNSUBSCRIBE":"SUBSCRIBE - " + MyUtil.convertPriceInSol(selectedCreator.monthPrice.toNumber()) + " SOL"} </a>
                         </div>
                 </div>
             </div>

@@ -14,9 +14,9 @@ export default function CreatorHome() {
         {
         connectedUser.contents.map((item, index) => {  
           return (
-            <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
+                  <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                     <p className="px-4 text-gray-800">
-                      {item.description}
+                      {item.title}
                       <br />
                       <span
                         className="text-sm text-gray-600"

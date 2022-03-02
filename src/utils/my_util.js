@@ -94,6 +94,14 @@ class MyUtil{
     static hasUserLiked(userVotes, userAddress){ 
         return userVotes.map((userVote) => userVote.toString()).includes(userAddress.toString());
     }
+
+    static convertPriceInSol(monthPrice){
+        return monthPrice / 1000
+    }
+
+    static convertPriceInMilliSol(monthPrice){
+        return monthPrice * 1000
+    }
 }
 
 export {MyUtil}
