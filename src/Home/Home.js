@@ -158,7 +158,7 @@ export default function Home() {
       }
   }
 
-  
+  /*
   const addUser = async () => {
     try {
       const provider = getProvider();
@@ -175,7 +175,7 @@ export default function Home() {
     } catch (error) {
       console.log("Error creating user:", error)
     }
-  }; 
+  };*/ 
     
   return (
       <div className="App">

@@ -63,13 +63,13 @@ export default function Menu(connectedUser, isCreator = false) {
                 {
                     connectedUser.creator && !isCreator &&   
                         <li>
-                            <Link to={"/" + connectedUser.name} className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View my page</Link>
+                            <Link to={"/" + connectedUser.name} className="px-4 py-2 text-sm bg-indigo-100 text-indigo-500 rounded uppercase tracking-wider font-semibold hover:bg-indigo-200">View page</Link>
                         </li>
                 }
                 {
                     connectedUser.creator && !isCreator &&
                         <li>
-                            <Link to={"/post/new"} className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create New Post</Link>
+                            <Link to={"/post/new"} className="px-2 py-2 text-xs bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create Post</Link>
                         </li>
                 }
                 {

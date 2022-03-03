@@ -49,7 +49,6 @@ export const getProvider = () => {
     return provider;
 }
 
-
 export const UserContext = React.createContext({}); 
 
 export default function App() {
@@ -58,6 +57,7 @@ export default function App() {
   const [users, setUsers] = useState([]);
   const [connectedUser, setUser] = useState(null);
   const [creators, setCreators] = useState([]); 
+
   const value = { 
     walletAddress, setWalletAddress, 
     solanaPrice, setSolanaPrice,
@@ -76,7 +76,7 @@ export default function App() {
             <Route path="/creator/account" element={<MyAccount />} />
             <Route path="/post/edit" element={<EditPost />} />
             <Route path="/post/new" element={<NewPost />} />
-            <Route path="/post" element={<PostPage />} />
+            <Route path="/post/view" element={<PostPage />} />
         </Routes>
       </Router>
     </UserContext.Provider>

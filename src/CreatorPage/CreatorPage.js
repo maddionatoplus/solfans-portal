@@ -82,6 +82,7 @@ export default function CreatorPage() {
                     console.log("subscription find", subscription)
                     setSelectedSubscription(subscription)
                 }
+
                 setSelectedCreator(selectedCreator)
             }
             else{
@@ -98,8 +99,10 @@ export default function CreatorPage() {
     return () => window.removeEventListener('load', onLoad);
   }, [creator]);
 
-  const renderLoading = () => {
-      return <div className="h-2/3"><ReactLoading type={"spin"} color={"grey"} height={'5%'} width={'5%'} /></div>
+  const     renderLoading = () => {
+      return <div style={{minHeight:"70vh", textAlign:"center", position:"relative"}}>
+                <span style={{position:"absolute", left:"50%", top:"50%", marginLeft:"-25px", marginTop:"-25px"}}><ReactLoading type={"spin"} color={"grey"} height={'50px'} width={'50px'} /></span>
+            </div>
   }
 
   const renderNotSubscribed = () => {
@@ -113,7 +116,7 @@ export default function CreatorPage() {
                 connectedUser.contents.map((item, index) => {  
                     return (
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
-                            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                            <div className="col-span-1 bg-white p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
                                 <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
                                 {
                                     Content(item)
@@ -126,7 +129,7 @@ export default function CreatorPage() {
                                 </span>
                                 <p className="px-4 text-sm text-gray-600">{item.description}</p>
                             </div>               
-                            <Link to="/post" state={{post:item, creator: selectedCreator}}> 
+                            <Link to="/post/view" state={{post:item, creator: selectedCreator}}> 
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -336,15 +339,17 @@ export default function CreatorPage() {
   const renderCreatorPage = () => {
     return (
         <div>
-            <main className="w-screen">
+            <main className="w-screen" style={{backgroundImage:'url(' + selectedCreator.image + ')', backgroundSize:"cover", backgroundPosition:"center"}}>
                 {/* <img src={selectedCreator.image} className="" /> */}
                 <div className="mb-6 pt-20 pb-6 pr-6 pl-6">
-                    <div className="w-full flex flex-col items-center mb-6">
+                    <div className="w-full flex flex-col items-center mb-6" >
                         <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
-                        </div>
-                        <div>
+                    </div>
+                    <div style={{textAlign:"center"}}>
+                        <div style={{backgroundColor: "white", display: "inline-block", padding:"16px", borderRadius:"6px"}}>
                             <h1 className="px-4 text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
                             <h2 className="px-4 text-base text-gray-600 font-regular text-center">{selectedCreator.bio}</h2>
+                        </div>  
                     </div>
                 </div>
             </main> 
