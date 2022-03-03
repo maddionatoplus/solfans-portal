@@ -1,8 +1,11 @@
 import { MyUtil } from "../utils/my_util"
 
 export default function Content(post){
+    if(post.link === "")
+        return <div></div>
+
     return (    
-        MyUtil.isImage(post.link) ?
+            MyUtil.isImage(post.link) ?
                 (
                 <img width="400" height="400" src={post.link} alt={post.userAddress}  title={post.link} />
                 )

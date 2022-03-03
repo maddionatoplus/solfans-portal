@@ -27,8 +27,11 @@ export default function CreatorHome() {
                     </p>
                     <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
                     {
-                      <Link to="/post" state={{post:item, creator: connectedUser}}> 
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      <Link to="/post" state={{post: item, creator: connectedUser}}> 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
                       </Link>
                      /* 
                     <Link to="/post/edit">
@@ -104,7 +107,7 @@ export default function CreatorHome() {
 
   return (
     <body className="relative antialiased bg-gray-100">
-      {Menu(connectedUser)}  
+      {Menu(connectedUser, false)}  
       <main className="container mx-w-6xl mx-auto py-4">
         <div className="flex flex-col mx-4 space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">

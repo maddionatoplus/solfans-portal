@@ -33,21 +33,26 @@ export default function NewPost() {
     }, []);
         
     const addContent = async () => {
-        if ( titleDescriptionValue === null || contentFileValue === null || contentDescriptionValue.length === 0) {
+        if ( titleDescriptionValue === null || contentDescriptionValue.length === 0) {
             console.log("Complete link and description!")
             return
         }
 
-        console.log(contentFileValue);
-
-        var randomizeName = MyUtil.randomizeName(contentFileValue.name);
         
-        console.log(randomizeName); 
+        var url = ""
         
-        var url = await uploadFile(randomizeName, contentFileValue)
+        if(contentFileValue){
+            console.log(contentFileValue);
+    
+            var randomizeName = MyUtil.randomizeName(contentFileValue.name);
+            
+            console.log(randomizeName); 
 
-        console.log('Content link:', url);
-        console.log('Content description:', contentDescriptionValue);
+            await uploadFile(randomizeName, contentFileValue)
+            
+            console.log('Content link:', url);
+            console.log('Content description:', contentDescriptionValue);
+        }
         try {
             const provider = getProvider();
             console.log(provider);

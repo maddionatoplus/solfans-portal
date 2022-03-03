@@ -202,7 +202,7 @@ export default function MyAccount() {
                                 </div>
                                 { !isCreator && <p>Fill in your info to become a creator:</p>}
                                 <label className="block">
-                                    <span className="text-gray-700">Name</span>
+                                    <span className="text-gray-700">Nickname</span>
                                     <input type="text" onChange={onUserChange}  className="mt-1 block w-full p-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value={userValue}  />
                                 </label>
                                 <label className="block">
@@ -277,6 +277,7 @@ export default function MyAccount() {
     }
     
   const renderSubscriptions = () => { 
+    console.log(connectedUser)
     return (
 
         <div className="col-span-1 bg-white rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
@@ -286,16 +287,19 @@ export default function MyAccount() {
             connectedUser &&  
             connectedUser.subscriptions.map((subscription, index) => {
                 console.log(subscription)
+                console.log(subscription.userAddress.toString())
+                console.log(users)
+                console.log(users.map((user) => user.userAddress.toString()).join(","))
                 var creator = users.find((user) => user.userAddress.toString() === subscription.userAddress.toString());
                 const subscriptionEndString = MyUtil.timeConverter(subscription.subscriptionEnd.toNumber());
                 console.log(creator)
-
+                
                 if(MyUtil.isSubscriptionValid(subscription) && creator) 
                     return (
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <p className="text-gray-800">{creator.name}<br/><span className="text-sm text-gray-600" style={{fontWeight: 400}}>Subscribtion is valid until: {subscriptionEndString}</span></p>
                             <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
-                                <Link to={"/" + creator.name} className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></Link>
+                                <Link to={"/" + creator.name.toLowerCase()} className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></Link>
                             </p>
                         </li>
                     ) 

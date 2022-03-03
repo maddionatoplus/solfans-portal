@@ -11,6 +11,7 @@ import { baseAccount, getProvider, programID } from "../App";
 import idl from '../idl.json';    
 import Menu from "../Widgets/Menu";
 import Content from "../Widgets/Content";
+import ReactLoading from 'react-loading';
 
 // SystemProgram is a reference to the Solana runtime!
 const { SystemProgram } = web3;
@@ -77,11 +78,11 @@ export default function CreatorPage() {
                     console.log("itsme")
                     console.log(selectedCreator.userAddress.toString() === wallet)
                     setItsMe(selectedCreator.userAddress.toString() === wallet)
+                    var subscription = user.subscriptions.find(s => s.userAddress.toString() === selectedCreator.userAddress.toString());
+                    console.log("subscription find", subscription)
+                    setSelectedSubscription(subscription)
                 }
                 setSelectedCreator(selectedCreator)
-                var subscription = user.subscriptions.find(s => s.userAddress.toString() === selectedCreator.userAddress.toString());
-                console.log("subscription find", subscription)
-                setSelectedSubscription(subscription)
             }
             else{
                 console.log("user not found");
@@ -98,7 +99,7 @@ export default function CreatorPage() {
   }, [creator]);
 
   const renderLoading = () => {
-    return <div className="w-full h-full">LOADING</div>
+      return <div className="h-2/3"><ReactLoading type={"spin"} color={"grey"} height={'5%'} width={'5%'} /></div>
   }
 
   const renderNotSubscribed = () => {
@@ -126,7 +127,10 @@ export default function CreatorPage() {
                                 <p className="px-4 text-sm text-gray-600">{item.description}</p>
                             </div>               
                             <Link to="/post" state={{post:item, creator: selectedCreator}}> 
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>    
                             </Link> 
                         </li>
                     )
@@ -146,6 +150,9 @@ export default function CreatorPage() {
         return (
             <div className="content-around">
                 <p>Subscribe to see {selectedCreator.name} contents</p>
+                {
+                    renderPostList(false)
+                }
             </div>
         )
     }
@@ -155,40 +162,43 @@ export default function CreatorPage() {
     )
   }
 
-  const renderPostList = () => {
+  const renderPostList = (subscribed) => {
     console.log(selectedSubscription)
-    return (
-        <div className="container col-span-3">
-            <div className="col-span-3 bg-white p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-            {
-                selectedSubscription != null && selectedCreator.contents.length > 0 ?
-                    selectedCreator.contents.map((item, index) => {  
-                        return (
-                                <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
-                                    <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                        <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
-                                        {
-                                            Content(item)
-                                        } 
-                                        <span
-                                            className="px-4 text-sm text-gray-600"
-                                            style={{ fontWeight: 400 }}
-                                        >
-                                            {MyUtil.timeConverter(item.date.toNumber())}
-                                        </span>
+    return ( 
+            selectedCreator.contents.map((item, index) => {  
+                return (
+                        <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
+                            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                                <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                                {
+                                    subscribed && Content(item)
+                                } 
+                                {
+                                    subscribed &&
+                                    <span
+                                        className="px-4 text-sm text-gray-600"
+                                        style={{ fontWeight: 400 }}
+                                    >
+                                        {MyUtil.timeConverter(item.date.toNumber())}
+                                    </span>
+                                }
+                                {
+                                    subscribed &&
                                         <p className="px-4 text-sm text-gray-600">{item.description}</p>
-                                    </div>               
-                                    <Link to="/post" state={{post:item}}> 
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                                    </Link> 
-                                </li>               
-                        )
-                    })
-                :
-                renderNotSubscribed()
-            }
-            </div>
-        </div>
+                                }
+                            </div>     
+                            {
+                                subscribed &&
+                                <Link to="/post" state={{post:item, creator: selectedCreator}}> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>    
+                                </Link> 
+                            }          
+                        </li>               
+                )
+            }) 
     )
   }
 
@@ -327,6 +337,7 @@ export default function CreatorPage() {
     return (
         <div>
             <main className="w-screen">
+                {/* <img src={selectedCreator.image} className="" /> */}
                 <div className="mb-6 pt-20 pb-6 pr-6 pl-6">
                     <div className="w-full flex flex-col items-center mb-6">
                         <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
@@ -340,7 +351,15 @@ export default function CreatorPage() {
             <main className="container mx-w-6xl mx-auto py-4">
                 <div className="flex flex-col space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 items-start px-4 xl:p-0 gap-y-4 md:gap-6"> 
-                        { renderPostList() } 
+                        <div className="container col-span-3">
+                            <div className="col-span-3 bg-white p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                                {
+                                    selectedSubscription != null && selectedCreator.contents.length > 0 ? 
+                                        renderPostList(true) :
+                                        renderNotSubscribed()
+                                } 
+                            </div>
+                        </div>
                         { renderSubscriptionArea() }
                     </div> 
                 </div>
@@ -351,7 +370,7 @@ export default function CreatorPage() {
  
   return(
     <body className="relative antialiased bg-gray-100"> 
-        {Menu(connectedUser)}
+        {Menu(connectedUser, true)}
         {selectedCreator == null && renderLoading()}
         {selectedCreator != null && renderCreatorPage()}
         <div>
