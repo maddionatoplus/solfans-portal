@@ -63,6 +63,10 @@
           "type": "string"
         },
         {
+          "name": "cover",
+          "type": "string"
+        },
+        {
           "name": "bio",
           "type": "string"
         },
@@ -93,6 +97,10 @@
         },
         {
           "name": "image",
+          "type": "string"
+        },
+        {
+          "name": "cover",
           "type": "string"
         },
         {
@@ -291,6 +299,10 @@
           },
           {
             "name": "image",
+            "type": "string"
+          },
+          {
+            "name": "cover",
             "type": "string"
           },
           {

@@ -14,12 +14,12 @@ import {useNavigate} from 'react-router-dom';
 export default function MyAccount() {
     const navigate = useNavigate();
 
-    const {connectedUser, walletAddress, users} = useContext(UserContext);
+    const {connectedUser, walletAddress, users, refreshData, setRefreshData} = useContext(UserContext);
     const [userValue, setUserValue] = useState('');
     const [addBioValue, setAddBioValue] = useState('');
     const [monthPriceValue, setMonthPriceValue] = useState('');
-    const [coverImageValue, setCoverImageValue] = useState(null);
-    const [becomeCreator, setBecomeCreator] = useState(false);
+    const [profileImageValue, setProfileImageValue] = useState(null); 
+    const [coverImageValue, setCoverImageValue] = useState(null); 
  
     useEffect(() => {  
         console.log("entro")
@@ -57,28 +57,41 @@ export default function MyAccount() {
             if(!validateInput())
                 return;
 
-          var url = connectedUser.image;
+          var urlProfileImage = connectedUser.image;
+          
+          if (profileImageValue !== null) {
+              console.log(profileImageValue);
+              
+            var randomizeProfile = MyUtil.randomizeName(profileImageValue.name);
+            
+            console.log(randomizeProfile); 
+            
+            urlProfileImage = await uploadFile(randomizeProfile, profileImageValue)
+        }
+
+        var urlCoverImage = connectedUser.cover;
      
           if (coverImageValue !== null) {
             console.log(coverImageValue);
         
-            var randomizeName = MyUtil.randomizeName(coverImageValue.name);
+            var randomizeCover = MyUtil.randomizeName(coverImageValue.name);
             
-            console.log(randomizeName); 
+            console.log(randomizeCover); 
             
-            url = await uploadFile(randomizeName, coverImageValue)
+            urlCoverImage = await uploadFile(randomizeCover, coverImageValue)
           }
 
           console.log(monthPriceValue)
 
-          await program.rpc.updateUserInfo(userValue, url, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
+          await program.rpc.updateUserInfo(userValue, urlProfileImage, urlCoverImage, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
             accounts: {
               baseAccount: baseAccount.publicKey,
               user: walletAddress,
             },
           });
 
-          navigate('/', {replace: true})
+          console.log("user updated")
+          setRefreshData(!refreshData) 
 
         } catch(error) {
           console.log("Error updatingUserInfo account:", error)
@@ -118,29 +131,42 @@ export default function MyAccount() {
             if(!validateInput())
             return;
             
-            var url = "";
+            var urlProfileImage = "";
+            var urlCoverImage = "";
             if(connectedUser){
-                url = connectedUser.image;
-
+                urlProfileImage = connectedUser.image;
+                urlCoverImage = connectedUser.cover;
             }
      
+            if (profileImageValue !== null) {
+                console.log(profileImageValue);
+            
+                var randomizeProfile = MyUtil.randomizeName(profileImageValue.name);
+                
+                console.log(randomizeProfile); 
+                
+                urlProfileImage = await uploadFile(randomizeProfile, profileImageValue)
+            }
+
             if (coverImageValue !== null) {
                 console.log(coverImageValue);
             
-                var randomizeName = MyUtil.randomizeName(coverImageValue.name);
+                var randomizeCover = MyUtil.randomizeName(coverImageValue.name);
                 
-                console.log(randomizeName); 
+                console.log(randomizeCover); 
                 
-                url = await uploadFile(randomizeName, coverImageValue)
+                urlCoverImage = await uploadFile(randomizeCover, coverImageValue)
             }
             
-            await program.rpc.becomeCreator(userValue, url, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
+            await program.rpc.becomeCreator(userValue, urlProfileImage, urlCoverImage, addBioValue, MyUtil.convertPriceInMilliSol(monthPriceValue), {
                 accounts: {
                 baseAccount: baseAccount.publicKey,
                 user: walletAddress,
                 },
             });
-
+  
+            console.log("user updated")
+            setRefreshData(!refreshData)
             navigate('/', {replace: true})
 
         } catch(error) {
@@ -148,46 +174,23 @@ export default function MyAccount() {
         }
     }
     
+    const onProfileImageChange = (value) => {
+        console.log(value);
+        if(value != null && MyUtil.isExtensionValid(value.name, Constants.userImageValidExtensions)){
+            setProfileImageValue(value);
+        } 
+    };
+    
+    
     const onCoverImageChange = (value) => {
         console.log(value);
-        if(value != null && MyUtil.isExtensionValid(value.name, Constants.coverImageValidExtensions)){
+        if(value != null && MyUtil.isExtensionValid(value.name, Constants.userImageValidExtensions)){
             setCoverImageValue(value);
         } 
     };
-
-    const becomeCreatorClick = () => {
-        console.log("become")
-        setBecomeCreator(true)
-    }
-
-    const renderBecomeCreatorButton = () => {
-        return (
-            <div>
-                <div className="flex flex-col space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
-                        
-                        <div className="container md:col-start-2 col-span-3">
-                            
-                            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                <div className="flex justify-between items-center">
-                                    <span className="text-xs text-gray-500 font-semibold">MY ACCOUNT</span>
-                                </div>
-                                <ul className="flex space-x-2 xl:space-x-4 text-sm font-semibold" onClick={() => becomeCreatorClick()}>
-                                    <button href="#" className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Become a creator</button>
-                                </ul> 
-                            </div>
-                        </div>  
-                    </div>
-                </div>
-            </div>
-        )
-    }
     
     const renderProfileForm = () => { 
         const isCreator = connectedUser && connectedUser.creator;
-
-        if(!isCreator && !becomeCreator)
-            return renderBecomeCreatorButton()
 
         return (
             <div>
@@ -212,16 +215,33 @@ export default function MyAccount() {
                                 </label>
                                 <input
                                     type = "text"
+                                    placeholder='Pick profile image'
+                                    value={profileImageValue != null ? profileImageValue.name : ""}
+                                    disabled={true}
+                                    /> 
+                                <FilePicker
+                                    extensions={Constants.userImageValidExtensions}
+                                    dims={{minWidth: 100, maxWidth: 500, minHeight: 100, maxHeight: 500}}
+                                    onChange={base64 => onProfileImageChange(base64)}
+                                    maxSize={10}
+                                    onError={(error) => alert("Accepted only: " + Constants.userImageValidExtensions.join(","))}
+                                    >
+                                    <button className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">
+                                    Pick image
+                                    </button>
+                                </FilePicker>
+                                <input
+                                    type = "text"
                                     placeholder='Pick cover image'
                                     value={coverImageValue != null ? coverImageValue.name : ""}
                                     disabled={true}
                                     /> 
                                 <FilePicker
-                                    extensions={Constants.coverImageValidExtensions}
+                                    extensions={Constants.userImageValidExtensions}
                                     dims={{minWidth: 100, maxWidth: 500, minHeight: 100, maxHeight: 500}}
                                     onChange={base64 => onCoverImageChange(base64)}
                                     maxSize={10}
-                                    onError={(error) => alert("Accepted only: " + Constants.coverImageValidExtensions.join(","))}
+                                    onError={(error) => alert("Accepted only: " + Constants.userImageValidExtensions.join(","))}
                                     >
                                     <button className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">
                                     Pick image
@@ -234,11 +254,8 @@ export default function MyAccount() {
                                     </ul> 
                                 }
                             </div>
-                            
                         </div>
-                        
                     </div>
-                    
                 </div>
                 <div className="flex flex-col space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
@@ -299,7 +316,7 @@ export default function MyAccount() {
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <p className="text-gray-800">{creator.name}<br/><span className="text-sm text-gray-600" style={{fontWeight: 400}}>Subscribtion is valid until: {subscriptionEndString}</span></p>
                             <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
-                                <Link to={"/" + creator.name.toLowerCase()} className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></Link>
+                                <Link to={"/" + creator.name.toLowerCase()} className="mr-2 hover:text-indigo-600"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg></Link>
                             </p>
                         </li>
                     ) 
@@ -317,9 +334,9 @@ export default function MyAccount() {
                 <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                     
                     <div className="container md:col-start-2 col-span-3">
-                        <Link to="/creator/home" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
+                        <Link to="/" className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                                    <path strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg> 
                                 <p className="text-base font-semibold">Dashboard</p>
                         </Link>

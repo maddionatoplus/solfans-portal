@@ -19,87 +19,36 @@ const { SystemProgram } = web3;
 export default function CreatorPage() {
   const navigate = useNavigate();
   const { creator } = useParams();
-  const {connectedUser, setUser, setCreators, setSolanaPrice, setWalletAddress, walletAddress} = useContext(UserContext);
+  const {connectedUser, walletAddress, creators} = useContext(UserContext);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [selectedCreator, setSelectedCreator] = useState(null);
   const [itsme, setItsMe] = useState(false);
-
-    const checkIfWalletIsConnected = async () => {
-        try {
-            const solana  = window.solana;
-
-            if (solana) {
-            if (solana.isPhantom) {
-                console.log('Phantom wallet found!');
-
-                var solanaPrice = await MyUtil.getSolanaPrice();
-                console.log(solanaPrice)
-                setSolanaPrice(solanaPrice.usd);
-                const response = await solana.connect({ onlyIfTrusted: true });
-                const wallet = response.publicKey.toString();
-                console.log('Connected with Public Key:', wallet);
-
-                setWalletAddress(wallet);
-                return wallet;
-            }
-            } else {
-            alert('Solana object not found! Get a Phantom Wallet 👻');
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
   
   useEffect(() => {
-    const onLoad = async () => {
-        const wallet = await checkIfWalletIsConnected()
-        try{
-            console.log("on load")
-            const provider = getProvider();
-            const program = new Program(idl, programID, provider);
-            const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
-            var user = account.users.find((user) => user.userAddress.toString() === wallet);
-            console.log("faccio get users")
-            console.log(account.users)
-            if(user != null && wallet != null){ 
-                setUser(user);
-            }
-            
-            let creators = (account.users.filter((user) => user.creator));
-            setCreators(creators);
-            var selectedCreator = creators.find((user) => user.name.toLowerCase() === creator.toLowerCase());
-            console.log(creator)
-            console.log(selectedCreator)
-            console.log(creators)
-            if(selectedCreator != null){
-                console.log(wallet)
-                if(wallet != null){
-                    console.log("itsme")
-                    console.log(selectedCreator.userAddress.toString() === wallet)
-                    setItsMe(selectedCreator.userAddress.toString() === wallet)
-                    var subscription = user.subscriptions.find(s => s.userAddress.toString() === selectedCreator.userAddress.toString());
-                    console.log("subscription find", subscription)
-                    setSelectedSubscription(subscription)
-                }
-
-                setSelectedCreator(selectedCreator)
-            }
-            else{
-                console.log("user not found");
-                navigate('/', {replace: true})
-            } 
+    console.log("on load") 
+    var selectedCreator = creators.find((user) => user.name.toLowerCase() === creator.toLowerCase());
+    console.log(creator) 
+    console.log(creators)
+    if(selectedCreator != null){
+        console.log(walletAddress)
+        if(walletAddress != null){
+            console.log("itsme")
+            console.log(selectedCreator.userAddress.toString() === walletAddress)
+            setItsMe(selectedCreator.userAddress.toString() === walletAddress)
+            var subscription = connectedUser.subscriptions.find(s => s.userAddress.toString() === selectedCreator.userAddress.toString());
+            console.log("subscription find", subscription)
+            setSelectedSubscription(subscription)
         }
-        catch(ex){
-            console.log("error", ex);
+
+        setSelectedCreator(selectedCreator)
+    }
+    else{
+        if(creators.length !== 0)
             navigate('/', {replace: true})
-        }
-    };
-    window.addEventListener('load', onLoad);
-    return () => window.removeEventListener('load', onLoad);
-  }, [creator]);
+    }   
+  }, [walletAddress, creators]);
 
-  const     renderLoading = () => {
+  const renderLoading = () => {
       return <div style={{minHeight:"70vh", textAlign:"center", position:"relative"}}>
                 <span style={{position:"absolute", left:"50%", top:"50%", marginLeft:"-25px", marginTop:"-25px"}}><ReactLoading type={"spin"} color={"grey"} height={'50px'} width={'50px'} /></span>
             </div>
@@ -113,7 +62,7 @@ export default function CreatorPage() {
         if(connectedUser.contents.length > 0){
             console.log("ciao")
             return (
-                connectedUser.contents.map((item, index) => {  
+                connectedUser.contents.slice(0).reverse().map((item, index) => {  
                     return (
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <div className="col-span-1 bg-white p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
@@ -130,9 +79,9 @@ export default function CreatorPage() {
                                 <p className="px-4 text-sm text-gray-600">{item.description}</p>
                             </div>               
                             <Link to="/post/view" state={{post:item, creator: selectedCreator}}> 
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>    
                             </Link> 
                         </li>
@@ -168,7 +117,7 @@ export default function CreatorPage() {
   const renderPostList = (subscribed) => {
     console.log(selectedSubscription)
     return ( 
-            selectedCreator.contents.map((item, index) => {  
+            selectedCreator.contents.slice(0).reverse().map((item, index) => {  
                 return (
                         <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                             <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
@@ -193,9 +142,9 @@ export default function CreatorPage() {
                             {
                                 subscribed &&
                                 <Link to="/post" state={{post:item, creator: selectedCreator}}> 
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>    
                                 </Link> 
                             }          
@@ -339,10 +288,19 @@ export default function CreatorPage() {
   const renderCreatorPage = () => {
     return (
         <div>
-            <main className="w-screen" style={{backgroundImage:'url(' + selectedCreator.image + ')', backgroundSize:"cover", backgroundPosition:"center"}}>
+            <main className="w-screen h-80" style={{backgroundImage:'url(' + selectedCreator.cover + ')', backgroundSize:"cover", backgroundPosition:"center"}}>
+                <div class="py-20 px-6">
+                    <div class="absolute top-5 right-10">
+                        <ul class="flex items-center gap-2">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </main> 
+            <main>
                 {/* <img src={selectedCreator.image} className="" /> */}
-                <div className="mb-6 pt-20 pb-6 pr-6 pl-6">
-                    <div className="w-full flex flex-col items-center mb-6" >
+                <div class="mb-6" style={{marginTop:"-50px"}}> 
+                    <div class="w-full flex flex-col items-center mb-6">
                         <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
                     </div>
                     <div style={{textAlign:"center"}}>
@@ -350,9 +308,9 @@ export default function CreatorPage() {
                             <h1 className="px-4 text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
                             <h2 className="px-4 text-base text-gray-600 font-regular text-center">{selectedCreator.bio}</h2>
                         </div>  
-                    </div>
+                    </div> 
                 </div>
-            </main> 
+            </main>
             <main className="container mx-w-6xl mx-auto py-4">
                 <div className="flex flex-col space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 items-start px-4 xl:p-0 gap-y-4 md:gap-6"> 

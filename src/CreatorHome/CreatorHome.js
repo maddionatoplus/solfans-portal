@@ -4,15 +4,20 @@ import { useContext, useEffect, } from "react";
 import { UserContext } from "../App";
 import { MyUtil } from "../utils/my_util";
 import Menu from "../Widgets/Menu";
+import { Program, web3 } from '@project-serum/anchor';
+import { baseAccount, getProvider, programID } from "../App";
+import idl from '../idl.json'; 
+
+const { SystemProgram } = web3;
 
 export default function CreatorHome() {
-  const {connectedUser, solanaPrice} = useContext(UserContext);
+  const {connectedUser, solanaPrice, walletAddress, users} = useContext(UserContext);
 
   const renderPostList = () => {  
     return(
       <ul className="divide-y-2 divide-gray-100 overflow-x-auto w-full">
         {
-        connectedUser.contents.map((item, index) => {  
+        connectedUser.contents.slice(0).reverse().map((item, index) => {  
           return (
                   <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
                     <p className="px-4 text-gray-800">
@@ -28,9 +33,9 @@ export default function CreatorHome() {
                     <p className="md:text-sm text-gray-800 flex gap-1 cursor-pointer">
                     {
                       <Link to="/post/view" state={{post: item, creator: connectedUser}}> 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                          <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                       </Link>
                      /* 
@@ -48,7 +53,7 @@ export default function CreatorHome() {
                           >
                           {" "}
                           <path
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
@@ -65,7 +70,7 @@ export default function CreatorHome() {
                           stroke="currentColor"
                           >
                           <path
-                            stroke-linecap="round"
+                            strokeLinecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
@@ -106,59 +111,138 @@ export default function CreatorHome() {
       )
   }
 
-  return (
-    <body className="relative antialiased bg-gray-100">
-      {Menu(connectedUser, false)}  
-      <main className="container mx-w-6xl mx-auto py-4">
-        <div className="flex flex-col mx-4 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
-            <div className="container col-span-4">
-              <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500 font-semibold">
-                    RECENT POSTS
-                  </span>
-                </div>
-                {
-                  renderPostList()
-                }
+  const renderCreator = () => {
+    return (
+      <div className="flex flex-col mx-4 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
+          <div className="container col-span-4">
+            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500 font-semibold">
+                  RECENT POSTS
+                </span>
               </div>
-              <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500 font-semibold mb-1">
-                    CONTRIBUTORS
-                  </span>
-                </div>
-                {
-                  renderSubscriptions()
-                }
+              {renderPostList()}
+            </div>
+            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500 font-semibold mb-1">
+                  CONTRIBUTORS
+                </span>
+              </div>
+              {renderSubscriptions()}
+            </div>
+          </div>
+          <div className="container col-span-1">
+            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+              <div className="grid">
+                <span className="text-xs text-gray-500 font-semibold mb-1">
+                  TOTAL EARNINGS (SOL)
+                </span>
+                <h2 className="font-bold text-4xl mb-1">{MyUtil.convertPriceInSol(connectedUser.total.toNumber())}</h2>
+                <span className="text-xs text-gray-500 font-regular">
+                  {(MyUtil.convertPriceInSol(connectedUser.total.toNumber()) * solanaPrice).toFixed(2)} $
+                </span>
               </div>
             </div>
-            <div className="container col-span-1">
-              <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                <div className="grid">
-                  <span className="text-xs text-gray-500 font-semibold mb-1">
-                    TOTAL EARNINGS (SOL)
-                  </span>
-                  <h2 className="font-bold text-4xl mb-1">{MyUtil.convertPriceInSol(connectedUser.total.toNumber())}</h2>
-                  <span className="text-xs text-gray-500 font-regular">  
-                  {(MyUtil.convertPriceInSol(connectedUser.total.toNumber()) * solanaPrice).toFixed(2)} $
-                  </span>
-                </div>
-              </div>
-              <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6">
-                <div className="grid">
-                  <span className="text-xs text-gray-500 font-semibold mb-1">
-                    TOTAL SUPPORTERS
-                  </span>
-                  <h2 className="font-bold text-4xl mb-1">{
-                      connectedUser.followers.length
-                    }</h2>
-                </div>
+            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6">
+              <div className="grid">
+                <span className="text-xs text-gray-500 font-semibold mb-1">
+                  TOTAL SUPPORTERS
+                </span>
+                <h2 className="font-bold text-4xl mb-1">{connectedUser.followers.length}</h2>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  const renderNotConnectedUser = () => {
+    return (
+      <div className="flex flex-col mx-4 space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
+          <div className="container col-span-5">
+            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-gray-500 font-semibold">
+                  CONNECT YOUR WALLET TO SEE YOUR DATA!
+                </span>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderBecomeCreatorButton = () => {
+    return (
+        <div>
+            <div className="flex flex-col space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
+                    
+                    <div className="container md:col-start-2 col-span-3">
+                        
+                        <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                            <div className="flex justify-between items-center">
+                                <span className="text-xs text-gray-500 font-semibold">MY ACCOUNT</span>
+                            </div>
+                            <ul className="flex space-x-2 xl:space-x-4 text-sm font-semibold">
+                                <Link to={"/creator/account"} className="px-4 py-2 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider font-semibold hover:bg-indigo-600 hover:text-indigo-100">Become a creator</Link>
+                            </ul> 
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+    )
+  }
+
+  
+  const renderOneTimeInizialization = () => {
+    // If we hit this, it means the program account hasn't been initialized.
+    if (users === null) {
+      return (
+        <div className="connected-container">
+          <button className="cta-button submit-gif-button" onClick={createTopContentAccount}>
+            Do One-Time Initialization Solfans
+          </button>
+        </div>
+      )
+    }
+  }
+
+  const createTopContentAccount = async () => {
+    try {
+      const provider = getProvider();
+      const program = new Program(idl, programID, provider);
+      await program.rpc.initialize({
+        accounts: {
+          baseAccount: baseAccount.publicKey,
+          user: provider.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+        },
+        signers: [baseAccount]
+      });
+      console.log("Created a new BaseAccount w/ address:", baseAccount.publicKey.toString())
+
+    } catch(error) {
+      console.log("Error creating BaseAccount account:", error)
+    }
+  }
+
+
+  return (
+    <body className="relative antialiased bg-gray-100">
+      {Menu(connectedUser, false)}  
+      <main className="container mx-w-6xl mx-auto py-4">
+        {walletAddress && !users && renderOneTimeInizialization(false)} 
+        {connectedUser && connectedUser.creator && renderCreator()}
+        {connectedUser && !connectedUser.creator && renderBecomeCreatorButton()}
+        {!connectedUser && walletAddress && renderBecomeCreatorButton()}
+        {!walletAddress && renderNotConnectedUser()}
       </main>
     </body>
   );
