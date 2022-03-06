@@ -39,7 +39,6 @@ export default function Menu(connectedUser, isCreator = false) {
   };
 
     const drawNoConnectedButton = () => {
-        console.log("draw no connected")
         return (
             <ul className="flex items-center gap-2 mx-4">
                 <li>

@@ -47,7 +47,7 @@ export default function NewPost() {
             
             console.log(randomizeName); 
 
-            await uploadFile(randomizeName, contentFileValue)
+            url = await uploadFile(randomizeName, contentFileValue)
             
             console.log('Content link:', url);
             console.log('Content description:', contentDescriptionValue);
