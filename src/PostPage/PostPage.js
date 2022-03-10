@@ -62,7 +62,7 @@ export default function PostPage () {
                         <p className="px-4 text-sm font-semibold text-center text-gray-600">Powered by</p>
                     </div>
                     <div>
-                        <a href="https://solfans.xyz/" target="_blank" rel="noreferrer"><img src={solfansLogo} alt="solfans" className="h-16 w-32 bg-gray-200 border-none" /></a>
+                        <a href="https://solfans.xyz/" target="_blank" rel="noreferrer"><img src={solfansLogo} alt="solfans" className="h-16 w-32 border-none" /></a>
                     </div>
                 </div>
             </main>

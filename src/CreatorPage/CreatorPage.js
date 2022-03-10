@@ -60,39 +60,40 @@ export default function CreatorPage() {
         console.log("itsme")
         console.log(connectedUser)
         if(connectedUser.contents.length > 0){
-            console.log("ciao")
             return (
                 connectedUser.contents.slice(0).reverse().map((item, index) => {  
                     return (
-                        <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
-                            <div className="col-span-1 bg-white p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
-                                <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                        <div className="relative pb-6 flex justify-between text-base text-gray-500 font-semibold bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                            <div className="col-span-1 p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
+                                <h2 className="text-2xl font-bold">{item.title}</h2>
                                 {
                                     Content(item)
                                 } 
                                 <span
-                                    className="px-4 text-sm text-gray-600"
+                                    className="text-sm text-gray-600"
                                     style={{ fontWeight: 400 }}
                                 >
                                     {MyUtil.timeConverter(item.date.toNumber())}
                                 </span>
-                                <p className="px-4 text-sm text-gray-600">{item.description}</p>
+                                <p className="text-sm text-gray-600">{item.description}</p>
                             </div>               
-                            <Link to="/post/view" state={{post:item, creator: selectedCreator}}> 
+                            <Link className="absolute right-3.5 top-0" to="/post/view" state={{post:item, creator: selectedCreator}}> 
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>    
                             </Link> 
-                        </li>
+                        </div>
                     )
                 })
             )
         }
         else {
             return (
-                <div className="content-around">
-                    <Link to="/post/new" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Publish your first content!</Link>
+                <div className="bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                    <div className="content-around" style={{padding: "50px 0px"}}>
+                        <Link to="/post/new" className="px-4 py-2 m-10 text-sm bg-indigo-700 text-white rounded uppercase tracking-wider text-center font-semibold hover:bg-indigo-600 hover:text-indigo-100">Create your first post</Link>
+                    </div>
                 </div>
             )
         }
@@ -100,17 +101,19 @@ export default function CreatorPage() {
 
     if(selectedSubscription == null){
         return (
-            <div className="content-around">
-                <p>Subscribe to see {selectedCreator.name} contents</p>
-                {
-                    renderPostList(false)
-                }
+            <>
+            <div className="bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                <p className="text-2xl text-gray-500 font-semibold">Subscribe to see {selectedCreator.name} contents</p>
             </div>
+            {renderPostList(false) }
+            </>
         )
     }
     
     return (
-        <p>Wait for {selectedCreator.name} first content!</p>
+        <div className="bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+            <p className="text-2xl text-gray-500 font-semibold">Wait for {selectedCreator.name} first content!</p>
+        </div>
     )
   }
 
@@ -119,16 +122,16 @@ export default function CreatorPage() {
     return ( 
             selectedCreator.contents.slice(0).reverse().map((item, index) => {  
                 return (
-                        <li className="pb-6 flex justify-between text-base text-gray-500 font-semibold">
-                            <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                <h2 className="px-4 text-2xl font-bold">{item.title}</h2>
+                    <div className="relative pb-6 flex justify-between text-base text-gray-500 font-semibold bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
+                        <div className="col-span-1 p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
+                                <h2 className="text-2xl font-bold">{item.title}</h2>
                                 {
                                     subscribed && Content(item)
                                 } 
                                 {
                                     subscribed &&
                                     <span
-                                        className="px-4 text-sm text-gray-600"
+                                        className="text-sm text-gray-600"
                                         style={{ fontWeight: 400 }}
                                     >
                                         {MyUtil.timeConverter(item.date.toNumber())}
@@ -136,19 +139,19 @@ export default function CreatorPage() {
                                 }
                                 {
                                     subscribed &&
-                                        <p className="px-4 text-sm text-gray-600">{item.description}</p>
+                                        <p className="text-sm text-gray-600">{item.description}</p>
                                 }
                             </div>     
                             {
                                 subscribed &&
-                                <Link to="/post" state={{post:item, creator: selectedCreator}}> 
+                                <Link className="absolute right-3.5 top-0" to="/post" state={{post:item, creator: selectedCreator}}> 
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>    
                                 </Link> 
                             }          
-                        </li>               
+                        </div>               
                 )
             }) 
     )
@@ -288,7 +291,7 @@ export default function CreatorPage() {
   const renderCreatorPage = () => {
     return (
         <div>
-            <main className="w-screen h-80" style={{backgroundImage:'url(' + selectedCreator.cover + ')', backgroundSize:"cover", backgroundPosition:"center"}}>
+            <main className="w-screen h-80 bg-indigo-600" style={{backgroundImage:'url(' + selectedCreator.cover + ')', backgroundSize:"cover", backgroundPosition:"center"}}>
                 <div class="py-20 px-6">
                     <div class="absolute top-5 right-10">
                         <ul class="flex items-center gap-2">
@@ -301,12 +304,12 @@ export default function CreatorPage() {
                 {/* <img src={selectedCreator.image} className="" /> */}
                 <div class="mb-6" style={{marginTop:"-50px"}}> 
                     <div class="w-full flex flex-col items-center mb-6">
-                        <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
-                    </div>
-                    <div style={{textAlign:"center"}}>
-                        <div style={{display: "inline-block", padding:"16px", borderRadius:"6px"}}>
-                            <h1 className="px-4 text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
-                            <h2 className="px-4 text-base text-gray-600 font-regular text-center">{selectedCreator.bio}</h2>
+                        <div class="h-32 w-32 bg-zinc-400 rounded-full bg-white">
+                            {selectedCreator.image ? <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" alt="" /> :<></>}
+                        </div> 
+                        <div className="pb-2.5 pl-2.5 pr-2.5" style={{display: "inline-block"}}>
+                            <h1 className="text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
+                            <h2 className="text-base text-gray-600 font-regular text-center">{selectedCreator.bio}</h2>
                         </div>  
                     </div> 
                 </div>
@@ -315,13 +318,11 @@ export default function CreatorPage() {
                 <div className="flex flex-col space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 items-start px-4 xl:p-0 gap-y-4 md:gap-6"> 
                         <div className="container col-span-3">
-                            <div className="col-span-3 bg-white p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                {
-                                    selectedSubscription != null && selectedCreator.contents.length > 0 ? 
-                                        renderPostList(true) :
-                                        renderNotSubscribed()
-                                } 
-                            </div>
+                            {
+                                selectedSubscription != null && selectedCreator.contents.length > 0 ? 
+                                    renderPostList(true) :
+                                    renderNotSubscribed()
+                            }
                         </div>
                         { renderSubscriptionArea() }
                     </div> 
