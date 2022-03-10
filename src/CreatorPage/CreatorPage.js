@@ -304,7 +304,7 @@ export default function CreatorPage() {
                         <img src={selectedCreator.image} className="h-32 w-32 bg-gray-500 border-none rounded-full" />
                     </div>
                     <div style={{textAlign:"center"}}>
-                        <div style={{backgroundColor: "white", display: "inline-block", padding:"16px", borderRadius:"6px"}}>
+                        <div style={{display: "inline-block", padding:"16px", borderRadius:"6px"}}>
                             <h1 className="px-4 text-3xl font-bold text-center text-gray-800">{selectedCreator.name}</h1>
                             <h2 className="px-4 text-base text-gray-600 font-regular text-center">{selectedCreator.bio}</h2>
                         </div>  
@@ -342,7 +342,7 @@ export default function CreatorPage() {
                     <p className="px-4 text-sm font-semibold text-center text-gray-600">Powered by</p>
                 </div>
                 <div>
-                    <a href="https://solfans.xyz/" target="_blank" rel="noreferrer"><img src={solfansLogo} alt="solfans" className="h-16 w-32 bg-gray-200 border-none" /></a>
+                    <a href="https://solfans.xyz/" target="_blank" rel="noreferrer"><img src={solfansLogo} alt="solfans" className="h-16 w-32 border-none" /></a>
                 </div>
             </div>
         </div> 

@@ -236,7 +236,7 @@ export default function CreatorHome() {
 
   return (
     <body className="relative antialiased bg-gray-100">
-      {Menu(connectedUser, false)}  
+      {Menu(connectedUser, false, true)}  
       <main className="container mx-w-6xl mx-auto py-4">
         {walletAddress && !users && renderOneTimeInizialization(false)} 
         {connectedUser && connectedUser.creator && renderCreator()}
