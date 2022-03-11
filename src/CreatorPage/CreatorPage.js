@@ -314,10 +314,10 @@ export default function CreatorPage() {
                     </div> 
                 </div>
             </main>
-            <main className="container mx-w-6xl mx-auto py-4">
+            <main className="container mx-w-6xl mx-auto py-4" style={{maxWidth: "1000px"}}>
                 <div className="flex flex-col space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-4 items-start px-4 xl:p-0 gap-y-4 md:gap-6"> 
-                        <div className="container col-span-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 items-start px-4 xl:p-0 gap-y-4 md:gap-6"> 
+                        <div className="container col-span-2">
                             {
                                 selectedSubscription != null && selectedCreator.contents.length > 0 ? 
                                     renderPostList(true) :
