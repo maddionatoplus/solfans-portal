@@ -143,6 +143,27 @@
       ]
     },
     {
+      "name": "deleteContent",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "contentIndex",
+          "type": "u32"
+        }
+      ]
+    },
+    {
       "name": "addSubscription",
       "accounts": [
         {

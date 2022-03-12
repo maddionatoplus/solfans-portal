@@ -19,7 +19,36 @@ export default function CreatorHome() {
     users,
     setUser,
     setWalletAddress,
+    setRefreshData,
+    refreshData
   } = useContext(UserContext);
+
+  
+  const deleteContent = async (item) => {
+    try {
+        const index = connectedUser.contents.indexOf(item)
+
+        const provider = getProvider();
+        console.log(provider);
+        const program = new Program(idl, programID, provider);
+        
+        console.log(baseAccount.publicKey)
+        console.log(walletAddress) 
+
+        await program.rpc.deleteContent(
+            index, {
+            accounts: {
+                baseAccount: baseAccount.publicKey,
+                user: walletAddress,
+            },
+        }); 
+
+        setRefreshData(!refreshData)
+
+    } catch (error) {
+        console.log("Error uploading content:", error)
+    }
+}; 
 
   const renderPostList = () => {
     return (
@@ -66,47 +95,24 @@ export default function CreatorHome() {
                         />
                       </svg>
                     </Link>
-                    /* 
-                    <Link to="/post/edit">
-                      <a
-                        href="edit-post.html"
-                        className="mr-2 hover:text-indigo-600"
-                        >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          >
-                          {" "}
-                          <path
-                            strokeLinecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                        </svg>
-                      </a></Link>
-                      <Link to="/post/edit">
-                      <a href="#" className="mr-2 hover:text-indigo-600">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          >
-                          <path
-                            strokeLinecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                        </svg>
-                      </a>
-                      </Link>
-                      */
+                    }
+                     {
+                        <a href="#" onClick={() => deleteContent(item)} className="mr-2 hover:text-indigo-600">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            >
+                            <path
+                              strokeLinecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                          </svg>
+                        </a>                      
                   }
                 </p>
               </li>
@@ -241,6 +247,8 @@ export default function CreatorHome() {
       </ul>
     );
   };
+
+
 
   const renderNotConnectedUser = () => {
     return (

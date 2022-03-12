@@ -19,7 +19,7 @@ const { SystemProgram } = web3;
 export default function CreatorPage() {
   const navigate = useNavigate();
   const { creator } = useParams();
-  const {connectedUser, walletAddress, creators} = useContext(UserContext);
+  const {connectedUser, walletAddress, creators } = useContext(UserContext);
   const [selectedSubscription, setSelectedSubscription] = useState(null);
   const [selectedCreator, setSelectedCreator] = useState(null);
   const [itsme, setItsMe] = useState(false);
