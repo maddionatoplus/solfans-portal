@@ -9,7 +9,7 @@ import solfansLogo from "../assets/solfans_logo.png"
 export default function PostPage () {
     const navigate = useNavigate();
     const location = useLocation();
-    const { post, creator } = location.state; 
+    const { post, creator } = location.state;
 
     useEffect(() => {
         const onLoad = async () => {
@@ -33,12 +33,14 @@ export default function PostPage () {
                 <div className="flex flex-col space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                         <div className="container md:col-start-2 col-span-3">
-                            <a href={"/"+ creator.name ?? ""} className="flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
+                            <span onClick={()=>{
+                                navigate(-1); // "/"+ creator.name ?? ""
+                            }} className="cursor-pointer flex items-start gap-2 group text-indigo-800 hover:text-indigo-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg> 
                                 <p className="text-base font-semibold">back</p>
-                            </a>
+                            </span>
                         </div>
                     </div>
                 </div>
