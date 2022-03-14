@@ -64,7 +64,7 @@ export default function CreatorPage() {
                 connectedUser.contents.slice(0).reverse().map((item, index) => {  
                     return (
                         <div className="relative pb-6 flex justify-between text-base text-gray-500 font-semibold bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                            <div className="col-span-1 p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
+                            <div className="col-span-1 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
                                 <h2 className="text-2xl font-bold">{item.title}</h2>
                                 {
                                     Content(item)
@@ -123,7 +123,7 @@ export default function CreatorPage() {
             selectedCreator.contents.slice(0).reverse().map((item, index) => {  
                 return (
                     <div className="relative pb-6 flex justify-between text-base text-gray-500 font-semibold bg-white col-span-3 p-6 mx-4 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                        <div className="col-span-1 p-6 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
+                        <div className="col-span-1 rounded-xlborder  border-gray-50 flex flex-col space-y-6 mb-6">
                                 <h2 className="text-2xl font-bold">{item.title}</h2>
                                 {
                                     subscribed && Content(item)
@@ -144,7 +144,7 @@ export default function CreatorPage() {
                             </div>     
                             {
                                 subscribed &&
-                                <Link className="absolute right-3.5 top-0" to="/post" state={{post:item, creator: selectedCreator}}> 
+                                <Link className="absolute right-3.5 top-0" to="/post/view" state={{post:item, creator: selectedCreator}}> 
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path strokeLinecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path strokeLinecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

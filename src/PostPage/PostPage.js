@@ -48,11 +48,11 @@ export default function PostPage () {
                     <div className="grid grid-cols-1 md:grid-cols-5 items-start px-4 xl:p-0 gap-y-4 md:gap-6">
                         <div className="container md:col-start-2 col-span-3">
                             <div className="col-span-1 bg-white p-6 rounded-xl border border-gray-50 flex flex-col space-y-6 mb-6">
-                                <h2 className="px-4 text-2xl font-bold">{post.title}</h2>
+                                <h2 className="text-2xl font-bold">{post.title}</h2>
                                 {
                                     Content(post)
                                 }
-                                <p className="px-4 text-sm text-gray-600">{post.description}</p>
+                                <p className="text-sm text-gray-600">{post.description}</p>
                             </div>
                         </div>
                     </div>
