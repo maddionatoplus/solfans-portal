@@ -46,7 +46,7 @@ export const getProvider = () => {
 
 export const UserContext = React.createContext({}); 
 
-export default function App() {
+export default function App() { 
   const [walletAddress, setWalletAddress] = useState("");
   const [solanaPrice, setSolanaPrice] = useState(null);
   const [users, setUsers] = useState([]);
@@ -54,7 +54,7 @@ export default function App() {
   const [refreshData, setRefreshData] = useState(false);
   const [creators, setCreators] = useState([]); 
   
-  const value = { 
+  const value = {  
     walletAddress, setWalletAddress, 
     solanaPrice, setSolanaPrice,
     users, setUsers,
