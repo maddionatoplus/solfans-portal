@@ -24,7 +24,7 @@ export default function CreatorPage() {
   const [selectedCreator, setSelectedCreator] = useState(null);
   const [itsme, setItsMe] = useState(false);
 
-  useEffect(() => {
+  useEffect( () => {
     console.log("on load");
     var selectedCreator = creators.find(
       (user) => user.name.toLowerCase() === creator.toLowerCase()
@@ -32,22 +32,28 @@ export default function CreatorPage() {
     console.log(creator);
     console.log(creators);
     if (selectedCreator != null) {
-      console.log(walletAddress);
-      if (walletAddress != null) {
-        console.log("itsme");
-        console.log(selectedCreator.userAddress.toString() === walletAddress);
-        setItsMe(selectedCreator.userAddress.toString() === walletAddress);
-        var subscription = connectedUser.subscriptions.find(
-          (s) =>
-            s.userAddress.toString() === selectedCreator.userAddress.toString()
-        );
-        console.log("subscription find", subscription);
-        setSelectedSubscription(subscription);
-      }
-
-      setSelectedCreator(selectedCreator);
+      selectCreator(selectedCreator);
     } else {
-      if (creators.length !== 0) navigate("/", { replace: true });
+      if (creators.length !== 0) {
+        navigate("/", { replace: true });
+      }
+      else{
+        const provider = getProvider();
+        const program = new Program(idl, programID, provider);
+        program.account.baseAccount.fetch(baseAccount.publicKey).then(
+          (account) => {
+            var selectedCreator = account.users.find(
+              (user) => (user.name.toLowerCase() === creator.toLowerCase()) && user.creator
+            );
+            if (selectedCreator != null) {
+              setSelectedCreator(selectedCreator);
+            } else {
+                navigate("/", { replace: true });
+            }
+          }
+        );
+
+      }
     }
   }, [walletAddress, creators]);
 
@@ -524,4 +530,20 @@ export default function CreatorPage() {
       </div>
     </body>
   );
+
+  function selectCreator(selectedCreator) {
+    console.log(walletAddress);
+    if (walletAddress != null) {
+      console.log("itsme");
+      console.log(selectedCreator.userAddress.toString() === walletAddress);
+      setItsMe(selectedCreator.userAddress.toString() === walletAddress);
+      var subscription = connectedUser.subscriptions.find(
+        (s) => s.userAddress.toString() === selectedCreator.userAddress.toString()
+      );
+      console.log("subscription find", subscription);
+      setSelectedSubscription(subscription);
+    }
+
+    setSelectedCreator(selectedCreator);
+  }
 }
