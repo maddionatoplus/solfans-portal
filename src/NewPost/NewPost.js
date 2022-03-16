@@ -23,7 +23,7 @@ export default function NewPost() {
     
     useEffect(() => {
         const onLoad = async () => {
-            console.log("walletAddres", walletAddress)
+            // console.log("walletAddres", walletAddress)
             if(!walletAddress){
                 navigate('/', {replace: true})
             }
@@ -34,32 +34,32 @@ export default function NewPost() {
         
     const addContent = async () => {
         if ( titleDescriptionValue === null || contentDescriptionValue.length === 0) {
-            console.log("Complete link and description!")
+            // console.log("Complete link and description!")
             return
         }
  
         var url = ""
         
         if(contentFileValue){
-            console.log(contentFileValue);
+            // console.log(contentFileValue);
     
             var randomizeName = MyUtil.randomizeName(contentFileValue.name);
             
-            console.log(randomizeName); 
+            // console.log(randomizeName); 
 
             url = await uploadFile(randomizeName, contentFileValue)
             
-            console.log('Content link:', url);
-            console.log('Content description:', contentDescriptionValue);
+            // console.log('Content link:', url);
+            // console.log('Content description:', contentDescriptionValue);
         }
         try {
             const provider = getProvider();
-            console.log(provider);
+            // console.log(provider);
             const program = new Program(idl, programID, provider);
             
-            console.log(baseAccount.publicKey)
-            console.log(walletAddress)
-            console.log(url)
+            // console.log(baseAccount.publicKey)
+            // console.log(walletAddress)
+            // console.log(url)
 
             await program.rpc.addContent(
                 url, 
@@ -70,7 +70,7 @@ export default function NewPost() {
                     user: walletAddress,
                 },
             });
-            console.log("Content successfully uploaded", contentFileValue)
+            // console.log("Content successfully uploaded", contentFileValue)
             setContentFileValue('');
             setTitleDescriptionValue('');
             setContentDescriptionValue('');
@@ -78,7 +78,7 @@ export default function NewPost() {
             navigate('/', {replace: true})
 
         } catch (error) {
-            console.log("Error uploading content:", error)
+            // console.log("Error uploading content:", error)
         }
     };  
   
@@ -93,7 +93,7 @@ export default function NewPost() {
     };
 
     const onContentFileChange = (value) => {
-        console.log(value);
+        // console.log(value);
         if(value != null && MyUtil.isExtensionValid(value.name, Constants.contentValidExtensions)){
         setContentFileValue(value);
         } 

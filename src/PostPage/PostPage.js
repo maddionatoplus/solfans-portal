@@ -17,7 +17,7 @@ export default function PostPage () {
                 console.log(post) 
             }
             catch(ex){
-                console.log("error", ex);
+                // console.log("error", ex);
                 navigate('/', {replace: true})
             }
         };

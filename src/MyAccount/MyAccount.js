@@ -23,11 +23,11 @@ export default function MyAccount() {
   const [coverImageValue, setCoverImageValue] = useState(null);
 
   useEffect(() => {
-    console.log("entro");
+    // console.log("entro");
     if (!walletAddress) {
       navigate("/", { replace: true });
     }
-    console.log("setAddUserValue");
+    // console.log("setAddUserValue");
     setUserValue(connectedUser != null ? connectedUser.name : "");
     setAddBioValue(connectedUser != null ? connectedUser.bio : "");
     setMonthPriceValue(
@@ -56,18 +56,18 @@ export default function MyAccount() {
     try {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
-      console.log(/^[A-Za-z][A-Za-z0-9_]{3,14}$/.test(userValue));
+      // console.log(/^[A-Za-z][A-Za-z0-9_]{3,14}$/.test(userValue));
 
       if (!validateInput()) return;
 
       var urlProfileImage = connectedUser.image;
 
       if (profileImageValue !== null) {
-        console.log(profileImageValue);
+        // console.log(profileImageValue);
 
         var randomizeProfile = MyUtil.randomizeName(profileImageValue.name);
 
-        console.log(randomizeProfile);
+        // console.log(randomizeProfile);
 
         urlProfileImage = await uploadFile(randomizeProfile, profileImageValue);
       }
@@ -75,16 +75,16 @@ export default function MyAccount() {
       var urlCoverImage = connectedUser.cover;
 
       if (coverImageValue !== null) {
-        console.log(coverImageValue);
+        // console.log(coverImageValue);
 
         var randomizeCover = MyUtil.randomizeName(coverImageValue.name);
 
-        console.log(randomizeCover);
+        // console.log(randomizeCover);
 
         urlCoverImage = await uploadFile(randomizeCover, coverImageValue);
       }
 
-      console.log(monthPriceValue);
+      // console.log(monthPriceValue);
 
       await program.rpc.updateUserInfo(
         userValue,
@@ -100,10 +100,10 @@ export default function MyAccount() {
         }
       );
 
-      console.log("user updated");
+      // console.log("user updated");
       setRefreshData(!refreshData);
     } catch (error) {
-      console.log("Error updatingUserInfo account:", error);
+      // console.log("Error updatingUserInfo account:", error);
     }
   };
 
@@ -119,8 +119,8 @@ export default function MyAccount() {
       return false;
     }
 
-    console.log(walletAddress);
-    console.log(userValue.toLowerCase());
+    // console.log(walletAddress);
+    // console.log(userValue.toLowerCase());
 
     if (
       users.find(
@@ -158,21 +158,21 @@ export default function MyAccount() {
       }
 
       if (profileImageValue !== null) {
-        console.log(profileImageValue);
+        // console.log(profileImageValue);
 
         var randomizeProfile = MyUtil.randomizeName(profileImageValue.name);
 
-        console.log(randomizeProfile);
+        // console.log(randomizeProfile);
 
         urlProfileImage = await uploadFile(randomizeProfile, profileImageValue);
       }
 
       if (coverImageValue !== null) {
-        console.log(coverImageValue);
+        // console.log(coverImageValue);
 
         var randomizeCover = MyUtil.randomizeName(coverImageValue.name);
 
-        console.log(randomizeCover);
+        // console.log(randomizeCover);
 
         urlCoverImage = await uploadFile(randomizeCover, coverImageValue);
       }
@@ -191,16 +191,16 @@ export default function MyAccount() {
         }
       );
 
-      console.log("user updated");
+      // console.log("user updated");
       setRefreshData(!refreshData);
       navigate("/", { replace: true });
     } catch (error) {
-      console.log("Error updatingUserInfo account:", error);
+      // console.log("Error updatingUserInfo account:", error);
     }
   };
 
   const onProfileImageChange = (value) => {
-    console.log(value);
+    // console.log(value);
     if (
       value != null &&
       MyUtil.isExtensionValid(value.name, Constants.userImageValidExtensions)
@@ -210,7 +210,7 @@ export default function MyAccount() {
   };
 
   const onCoverImageChange = (value) => {
-    console.log(value);
+    // console.log(value);
     if (
       value != null &&
       MyUtil.isExtensionValid(value.name, Constants.userImageValidExtensions)

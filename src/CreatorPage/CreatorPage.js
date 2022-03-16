@@ -25,12 +25,12 @@ export default function CreatorPage() {
   const [itsme, setItsMe] = useState(false);
 
   useEffect( () => {
-    console.log("on load");
+    // console.log("on load");
     var selectedCreator = creators.find(
       (user) => user.name.toLowerCase() === creator.toLowerCase()
     );
-    console.log(creator);
-    console.log(creators);
+    // console.log(creator);
+    // console.log(creators);
     if (selectedCreator != null) {
       selectCreator(selectedCreator);
     } else {
@@ -83,10 +83,10 @@ export default function CreatorPage() {
   };
 
   const renderNotSubscribed = () => {
-    console.log("renderNoContent");
+    // console.log("renderNoContent");
     if (itsme) {
-      console.log("itsme");
-      console.log(connectedUser);
+      // console.log("itsme");
+      // console.log(connectedUser);
       if (connectedUser.contents.length > 0) {
         return connectedUser.contents
           .slice(0)
@@ -172,7 +172,7 @@ export default function CreatorPage() {
   };
 
   const renderPostList = (subscribed) => {
-    console.log(selectedSubscription);
+    // console.log(selectedSubscription);
     return selectedCreator.contents
       .slice(0)
       .reverse()
@@ -227,7 +227,7 @@ export default function CreatorPage() {
   };
 
   const subscribe = async (creator) => {
-    console.log("SUBSCRIBE");
+    // console.log("SUBSCRIBE");
     try {
       alert(
         "Attention you should accept 2 transactions:\n1- to send money directly to the creator\n2- to confirm your subscription to Solfans"
@@ -235,8 +235,8 @@ export default function CreatorPage() {
       const provider = getProvider();
       const program = new Program(idl, programID, provider);
 
-      console.log(provider.wallet.publicKey);
-      console.log(creator.userAddress);
+      // console.log(provider.wallet.publicKey);
+      // console.log(creator.userAddress);
 
       const price =
         MyUtil.convertPriceInSol(creator.monthPrice.toNumber()) *
@@ -252,7 +252,7 @@ export default function CreatorPage() {
 
       var result = await provider.send(transaction);
 
-      console.log("Transaction result", result);
+      // console.log("Transaction result", result);
 
       await program.rpc.addSubscription({
         accounts: {
@@ -261,10 +261,10 @@ export default function CreatorPage() {
           creator: creator.userAddress,
         },
       });
-      console.log("Successful subscribed");
+      // console.log("Successful subscribed");
       window.location.reload();
     } catch (error) {
-      console.log("Error while subscribing:", error);
+      // console.log("Error while subscribing:", error);
     }
   };
 
@@ -280,17 +280,17 @@ export default function CreatorPage() {
           creator: creator.userAddress,
         },
       });
-      console.log("Successful unsubscribed");
+      // console.log("Successful unsubscribed");
       window.location.reload();
     } catch (error) {
-      console.log("Error while subscribing:", error);
+      // console.log("Error while subscribing:", error);
     }
   };
 
   const renderSubscriptionArea = () => {
-    console.log("walletAddress", walletAddress);
-    console.log("itsme", itsme);
-    console.log("selectedSubscription", selectedSubscription);
+    // console.log("walletAddress", walletAddress);
+    // console.log("itsme", itsme);
+    // console.log("selectedSubscription", selectedSubscription);
 
     var subscriptionEndString;
     var subscriptionValid = false;
@@ -532,15 +532,15 @@ export default function CreatorPage() {
   );
 
   function selectCreator(selectedCreator) {
-    console.log(walletAddress);
+    // console.log(walletAddress);
     if (walletAddress != null) {
-      console.log("itsme");
-      console.log(selectedCreator.userAddress.toString() === walletAddress);
+      // console.log("itsme");
+      // console.log(selectedCreator.userAddress.toString() === walletAddress);
       setItsMe(selectedCreator.userAddress.toString() === walletAddress);
       var subscription = connectedUser.subscriptions.find(
         (s) => s.userAddress.toString() === selectedCreator.userAddress.toString()
       );
-      console.log("subscription find", subscription);
+      // console.log("subscription find", subscription);
       setSelectedSubscription(subscription);
     }
 

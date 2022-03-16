@@ -77,17 +77,17 @@ export default function App() {
 
         if (solana) {
           if (solana.isPhantom) {
-              console.log('Phantom wallet found!');
+              // console.log('Phantom wallet found!');
 
               var solanaPrice = await MyUtil.getSolanaPrice();
-              console.log(solanaPrice)
+              // console.log(solanaPrice)
               setSolanaPrice(solanaPrice.usd);
               
               const response = await solana.connect({ onlyIfTrusted: true });
-              console.log(
+              /*console.log(
                 'Connected with Public Key:',
                 response.publicKey.toString()
-              );
+              );*/
 
               setWalletAddress(response.publicKey.toString());  
           }
@@ -100,9 +100,9 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log("wallet is set: ", walletAddress)
+    // console.log("wallet is set: ", walletAddress)
     if (walletAddress) {
-        console.log('Fetching Users...');
+        // console.log('Fetching Users...');
         getUsers()
         setRefreshData(false);
     }
@@ -115,19 +115,19 @@ export default function App() {
         const program = new Program(idl, programID, provider);
         const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
 
-        console.log("Got the account", account)
+        // console.log("Got the account", account)
         setUsers(account.users)
-        console.log(account.users); 
-        console.log(provider.wallet.publicKey.toString());
+        // console.log(account.users); 
+        // console.log(provider.wallet.publicKey.toString());
         var user = account.users.find((user) => user.userAddress.toString() === provider.wallet.publicKey.toString());
-        console.log(user)
+        // console.log(user)
 
         if(user != null && walletAddress != null){
-            console.log("user registered");
+            // console.log("user registered");
             setUser(user);
-            account.users.forEach(
+            /*account.users.forEach(
                 (user)=> console.log(user.userAddress.toString()
-            ));
+            ));*/
         }
 
         setCreators(account.users.filter((user) => user.creator)); 
@@ -142,7 +142,7 @@ export default function App() {
           }
         */
       } catch (error) {
-        console.log("Error in getUsers: ", error)
+        // console.log("Error in getUsers: ", error)
         setUsers(null);
         setUser(null);
     }

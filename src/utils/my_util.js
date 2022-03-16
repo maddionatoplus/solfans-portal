@@ -8,7 +8,7 @@ class MyUtil{
         while(toRet.length < length){
             toRet = "0" + toRet;
         }
-        console.log(toRet);
+        // console.log(toRet);
         return toRet;
     }
  
@@ -72,7 +72,7 @@ class MyUtil{
     }
 
     static isExtensionValid(fileName, validExtensions){
-        console.log(fileName);
+        // console.log(fileName);
         var extension = fileName.split(".").pop();
         return validExtensions.includes(extension);
     }

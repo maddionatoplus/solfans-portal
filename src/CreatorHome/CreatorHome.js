@@ -24,7 +24,7 @@ export default function CreatorHome() {
   } = useContext(UserContext);
 
   const renderSubscriptions = () => {
-    console.log(connectedUser);
+    // console.log(connectedUser);
     return (
       <ul className="divide-y-2 divide-gray-100 overflow-x-auto w-full">
         <li className="pb-3 flex justify-between text-sm text-gray-500 font-semibold">
@@ -303,7 +303,7 @@ export default function CreatorHome() {
     if (solana) {
       const response = await solana.connect();
       const wallet = response.publicKey.toString();
-      console.log("Connected with Public Key:", wallet);
+      // console.log("Connected with Public Key:", wallet);
       setWalletAddress(wallet);
       var user = users.find(
         (user) => user.userAddress.toString() === response.wallet
@@ -405,12 +405,12 @@ export default function CreatorHome() {
         },
         signers: [baseAccount],
       });
-      console.log(
+      /*console.log(
         "Created a new BaseAccount w/ address:",
         baseAccount.publicKey.toString()
-      );
+      );*/
     } catch (error) {
-      console.log("Error creating BaseAccount account:", error);
+      // console.log("Error creating BaseAccount account:", error);
     }
   };
 
@@ -425,11 +425,11 @@ export default function CreatorHome() {
       const index = connectedUser.contents.indexOf(item);
 
       const provider = getProvider();
-      console.log(provider);
+      // console.log(provider);
       const program = new Program(idl, programID, provider);
 
-      console.log(baseAccount.publicKey);
-      console.log(walletAddress);
+      // console.log(baseAccount.publicKey);
+      // console.log(walletAddress);
 
       await program.rpc.deleteContent(index, {
         accounts: {
@@ -440,7 +440,7 @@ export default function CreatorHome() {
 
       setRefreshData(!refreshData);
     } catch (error) {
-      console.log("Error uploading content:", error);
+      // console.log("Error uploading content:", error);
     }
   };
 

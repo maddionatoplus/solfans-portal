@@ -17,10 +17,10 @@ async function uploadFile(file_name, file) {
       ACL: 'public-read'
     }
     const data = await s3.send(new PutObjectCommand(objectParams))
-    console.log(data);
+    // console.log(data);
     return process.env.REACT_APP_S3_URL + imageUri
   } catch (error) {
-    console.log('uploading file to S3:\n\t' + error.message)
+    // console.log('uploading file to S3:\n\t' + error.message)
   }
 } 
 

@@ -9,7 +9,7 @@ export default function Menu(connectedUser, isCreator = false, isCreatorHome = f
     const {setUser, setWalletAddress, users, walletAddress} = useContext(UserContext);
     
     const disconnect = () => {
-        console.log("disconnect")    
+        // console.log("disconnect")    
         const solana  = window.solana;
         if (solana) {
             if (solana.isPhantom) {
@@ -17,7 +17,7 @@ export default function Menu(connectedUser, isCreator = false, isCreatorHome = f
                 setUser(null)
                 setWalletAddress(null)
                 navigate('/', {replace: true})
-                console.log("navigate")    
+                // console.log("navigate")    
             }
         }
     }
@@ -29,7 +29,7 @@ export default function Menu(connectedUser, isCreator = false, isCreatorHome = f
     if (solana) {
         const response = await solana.connect();
         const wallet = response.publicKey.toString()
-        console.log('Connected with Public Key:', wallet);
+        // console.log('Connected with Public Key:', wallet);
         setWalletAddress(wallet); 
         var user =  users.find((user) => user.userAddress.toString() === response.wallet); 
         if(user != null && wallet != null){ 
